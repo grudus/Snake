@@ -7,6 +7,10 @@ import java.awt.Graphics
 class Snake(val size: Dimension, private val startPosition: Position = Position(0, 0)) {
     private val length = 5
     internal var direction = Direction.RIGHT
+        set(value) {
+            if (direction.canChangeDirection(value))
+                field = value
+        }
     private val body: List<SnakeTile> = createBody()
 
     private fun createBody(): List<SnakeTile> {
