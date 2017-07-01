@@ -1,4 +1,4 @@
-package com.grudus.snake.game.menu
+package com.grudus.snake.menu
 
 enum class MenuState {
     PLAY, SETTINGS, HELP, EXIT;

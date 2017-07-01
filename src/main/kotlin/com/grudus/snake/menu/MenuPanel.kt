@@ -1,6 +1,7 @@
-package com.grudus.snake.game.menu
+package com.grudus.snake.menu
 
-import com.grudus.snake.game.Context
+
+import com.grudus.snake.Window
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics
@@ -11,7 +12,7 @@ import java.awt.font.TextAttribute
 import javax.swing.JPanel
 
 
-class MenuPanel(val context: Context) : JPanel(), KeyListener {
+class MenuPanel(val window: Window) : JPanel(), KeyListener {
     private var currentState = 0
     private val roboto = Font("Roboto", Font.PLAIN, 24)
 
@@ -47,7 +48,7 @@ class MenuPanel(val context: Context) : JPanel(), KeyListener {
         }
     }
 
-    fun drawCenteredString(g: Graphics, text: String, rect: Rectangle, font: Font) {
+    private fun drawCenteredString(g: Graphics, text: String, rect: Rectangle, font: Font) {
         val metrics = g.getFontMetrics(font)
         val x = rect.x + (rect.width - metrics.stringWidth(text)) / 2
         val y = rect.y + (rect.height - metrics.height) / 2 + metrics.ascent
@@ -60,20 +61,22 @@ class MenuPanel(val context: Context) : JPanel(), KeyListener {
 
     override fun keyPressed(e: KeyEvent?) {
         changeCurrentState(e!!)
-        repaint()
     }
 
     override fun keyReleased(e: KeyEvent?) {
+        if (e!!.keyCode == KeyEvent.VK_ENTER)
+            window.onStateChange(MenuState.values()[currentState])
     }
 
-    fun changeCurrentState(e: KeyEvent) {
+    private fun changeCurrentState(e: KeyEvent) {
         currentState = when (e.keyCode) {
-            38 -> (--currentState % MenuState.values().size)
-            40 -> (++currentState % MenuState.values().size)
+            KeyEvent.VK_UP -> (--currentState % MenuState.values().size)
+            KeyEvent.VK_DOWN -> (++currentState % MenuState.values().size)
             else -> currentState
         }
         if (currentState < 0) {
             currentState = MenuState.values().size - Math.abs(currentState)
         }
+        repaint()
     }
 }
