@@ -14,9 +14,11 @@ import javax.swing.Timer
 class GamePanel(val window: Window) : JPanel(), KeyListener {
     private val backgroundColor = Color.decode("#AB987A")!!
     private val snake = Snake(Dimension(32, 32), Position(100, 100))
-    private val timer = Timer(64, {
+
+    private val timer = Timer(Speed.SLOW.delayTime, {
         updateView()
     })
+
 
     init {
         background = backgroundColor
@@ -46,7 +48,7 @@ class GamePanel(val window: Window) : JPanel(), KeyListener {
     }
 
     override fun keyTyped(e: KeyEvent?) {
-       println("typed: " + e!!.keyCode)
+
     }
 
     override fun keyPressed(e: KeyEvent?) {
@@ -55,9 +57,13 @@ class GamePanel(val window: Window) : JPanel(), KeyListener {
             KeyEvent.VK_DOWN -> snake.direction = Direction.DOWN
             KeyEvent.VK_LEFT -> snake.direction = Direction.LEFT
             KeyEvent.VK_RIGHT -> snake.direction = Direction.RIGHT
+            KeyEvent.VK_SPACE -> timer.delay = Speed.FAST.delayTime
         }
     }
 
     override fun keyReleased(e: KeyEvent?) {
+        when(e!!.keyCode) {
+            KeyEvent.VK_SPACE -> timer.delay = Speed.SLOW.delayTime
+        }
     }
 }
