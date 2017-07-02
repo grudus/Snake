@@ -13,8 +13,8 @@ import javax.swing.Timer
 
 class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val tileDimension: Dimension) : JPanel() {
     private val backgroundColor = Color.decode("#AB987A")!!
-    private val snake = Snake(tileDimension, Position(tileDimension.width*3, tileDimension.height * 3))
     private val board = Board(columns, rows)
+    private val snake = Snake(tileDimension, Position(tileDimension.width*3, tileDimension.height * 3), board)
     private val normalSpeed = Speed.FAST
 
     private val timer = Timer(normalSpeed.delayTime, {
@@ -45,6 +45,8 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
 
     fun updateView() {
         snake.updatePosition()
+        if (snake.isDead)
+            println("Snake is dead!")
         repaint()
     }
 
