@@ -12,7 +12,7 @@ class GamePanel(private val window: Window) : JPanel(), KeyListener {
     private val backgroundColor = Color.RED
     private var isPaused = false
 
-    private val boardPanel = BoardPanel(this, 20, 10, Dimension(32, 32))
+    private val boardPanel = BoardPanel(this, 40, 30, Dimension(20, 20))
 
     init {
         background = backgroundColor

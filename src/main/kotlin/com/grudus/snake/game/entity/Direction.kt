@@ -1,32 +1,21 @@
 package com.grudus.snake.game.entity
 
-import com.grudus.snake.game.Position
-import java.awt.Dimension
 
-
-enum class Direction {
-    UP {
-        override fun newPosition(oldPosition: Position, tile: Dimension)
-                = Position(oldPosition.x, oldPosition.y - tile.height)
+//Because position is calculated from top left corner, so when snake goes down it increases it's 'y' position
+enum class Direction(val dx: Int, val dy: Int) {
+    UP(0, -1) {
         override fun canChangeDirection(newDirection: Direction) = newDirection != DOWN
     },
-    DOWN {
-        override fun newPosition(oldPosition: Position, tile: Dimension)
-                = Position(oldPosition.x, oldPosition.y + tile.height)
+    DOWN(0, 1) {
         override fun canChangeDirection(newDirection: Direction) = newDirection != UP
     },
-    LEFT {
-        override fun newPosition(oldPosition: Position, tile: Dimension)
-                = Position(oldPosition.x - tile.width, oldPosition.y)
+    LEFT(-1, 0) {
         override fun canChangeDirection(newDirection: Direction) = newDirection != RIGHT
     },
-    RIGHT {
-        override fun newPosition(oldPosition: Position, tile: Dimension)
-                = Position(oldPosition.x + tile.width, oldPosition.y)
+    RIGHT(1, 0) {
         override fun canChangeDirection(newDirection: Direction) = newDirection != LEFT
     }
     ;
 
-    abstract fun newPosition(oldPosition: Position, tile: Dimension): Position
     abstract fun canChangeDirection(newDirection: Direction) : Boolean
 }
