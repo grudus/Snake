@@ -9,7 +9,7 @@ import java.awt.Graphics
 class NormalFood : Food() {
     override fun draw(g: Graphics, tileSize: Dimension, position: Position) {
         g.color = Color.GREEN
-        g.fillOval(position.x - tileSize.width / 2, position.y - tileSize.height / 2, tileSize.width, tileSize.height)
+        g.fillOval(position.x - tileSize.width / 2 + 3, position.y - tileSize.height / 2 + 3, tileSize.width - 6, tileSize.height - 6)
     }
 
     override fun interact(snake: Snake) {

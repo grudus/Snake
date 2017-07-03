@@ -10,9 +10,10 @@ import java.util.*
 class Foods {
     private val positionToFood = mutableMapOf<Position, Food>()
     private val random = Random()
+    private val possibleFoods = listOf(NormalFood(), NormalFood(), BigIncreaseFood())
 
     fun clean() = positionToFood.clear()
-    fun newFood(position: Position) = positionToFood.put(position, NormalFood())
+    fun newFood(position: Position) = positionToFood.put(position, possibleFoods[random.nextInt(possibleFoods.size)])
     fun containsFood(position: Position) = positionToFood.containsKey(position)
     operator fun get(position: Position) = positionToFood[position]
     fun drawAll(g: Graphics, tileSize: Dimension) = positionToFood.forEach { position, food -> food.draw(g, tileSize, position) }
