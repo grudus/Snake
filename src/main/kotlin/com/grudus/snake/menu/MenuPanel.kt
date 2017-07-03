@@ -2,6 +2,8 @@ package com.grudus.snake.menu
 
 
 import com.grudus.snake.Window
+import com.grudus.snake.utils.FontUtils
+import com.grudus.snake.utils.GraphicsUtils
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics
@@ -14,7 +16,7 @@ import javax.swing.JPanel
 
 class MenuPanel(val window: Window) : JPanel(), KeyListener {
     private var currentState = 0
-    private val roboto = Font("Roboto", Font.PLAIN, 24)
+    private val roboto = FontUtils.roboto(24)
 
     private val backgroundColor = Color.decode("#f5f5f5")
     private val normalColor = Color.decode("#242424")
@@ -44,17 +46,10 @@ class MenuPanel(val window: Window) : JPanel(), KeyListener {
                 g.color = normalColor
                 font = roboto.deriveFont(Font.PLAIN)
             }
-            drawCenteredString(g, state.toString(), Rectangle(0, padding + height * index, width, height), font)
+            GraphicsUtils.drawCenteredString(g, state.toString(), Rectangle(0, padding + height * index, width, height), font)
         }
     }
 
-    private fun drawCenteredString(g: Graphics, text: String, rect: Rectangle, font: Font) {
-        val metrics = g.getFontMetrics(font)
-        val x = rect.x + (rect.width - metrics.stringWidth(text)) / 2
-        val y = rect.y + (rect.height - metrics.height) / 2 + metrics.ascent
-        g.font = font
-        g.drawString(text, x, y)
-    }
 
     override fun keyTyped(e: KeyEvent?) {
     }

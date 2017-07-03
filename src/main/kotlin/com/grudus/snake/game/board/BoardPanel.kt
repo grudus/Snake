@@ -3,6 +3,8 @@ package com.grudus.snake.game
 import com.grudus.snake.game.board.Board
 import com.grudus.snake.game.entity.Direction
 import com.grudus.snake.game.entity.Snake
+import com.grudus.snake.utils.FontUtils
+import com.grudus.snake.utils.GraphicsUtils
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
@@ -12,10 +14,12 @@ import javax.swing.JPanel
 import javax.swing.Timer
 
 class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val tileDimension: Dimension) : JPanel() {
-    private val backgroundColor = Color.decode("#AB987A")!!
+    private val backgroundColor = Color(171, 152, 122)
+    private val transparentBackground = Color(42, 42, 42, 200)
     private val board = Board(columns, rows)
-    private val snake = Snake(tileDimension, Position(tileDimension.width*3, tileDimension.height * 3), board)
+    private var snake = Snake(tileDimension, Position(tileDimension.width * 3, tileDimension.height * 3), board)
     private val normalSpeed = Speed.FAST
+    private val roboto = FontUtils.roboto(32)
 
     private val timer = Timer(normalSpeed.delayTime, {
         updateView()
@@ -27,26 +31,41 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
         isFocusable = true
     }
 
-    fun start() {
+    fun restart() {
+        snake = Snake(tileDimension, Position(tileDimension.width * 3, tileDimension.height * 3), board)
         timer.start()
     }
 
-    fun stop() {
+    fun startSnakeMovement() {
+        if (!snake.isDead)
+            timer.start()
+    }
+
+    fun stopSnakeMovement() {
         timer.stop()
     }
 
     override fun paintComponent(g: Graphics?) {
-        g!!.color = backgroundColor
-        g.fillRect(0, 0, width, height)
+        fillBackground(g!!)
         board.draw(g, tileDimension)
+        if (snake.isDead) {
+            fillBackground(g, transparentBackground)
+            g.color = Color.RED
+            GraphicsUtils.drawCenteredString(g, "GAME OVER", visibleRect, roboto)
+        }
         snake.draw(g)
+    }
+
+    private fun fillBackground(graphics: Graphics, color: Color = backgroundColor) {
+        graphics.color = color
+        graphics.fillRect(0, 0, width, height)
     }
 
 
     fun updateView() {
         snake.updatePosition()
         if (snake.isDead)
-            println("Snake is dead!")
+            timer.stop()
         repaint()
     }
 
@@ -57,6 +76,7 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
             VK_LEFT, VK_A -> snake.direction = Direction.LEFT
             VK_RIGHT, VK_D -> snake.direction = Direction.RIGHT
             VK_SPACE -> timer.delay = Speed.EXTRA_FAST.delayTime
+            VK_ENTER -> if (snake.isDead) restart()
         }
     }
 

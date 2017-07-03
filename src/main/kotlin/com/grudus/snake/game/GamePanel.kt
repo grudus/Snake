@@ -27,7 +27,7 @@ class GamePanel(private val window: Window) : JPanel(), KeyListener {
 
     fun start() {
         requestFocus()
-        boardPanel.start()
+        boardPanel.startSnakeMovement()
     }
 
     override fun keyPressed(e: KeyEvent?) {
@@ -39,9 +39,9 @@ class GamePanel(private val window: Window) : JPanel(), KeyListener {
 
     private fun togglePause() {
         if (isPaused)
-            boardPanel.start()
+            boardPanel.startSnakeMovement()
         else
-            boardPanel.stop()
+            boardPanel.stopSnakeMovement()
         isPaused = !isPaused
     }
 

@@ -28,6 +28,8 @@ class Snake(val size: Dimension, private val startPosition: Position = Position(
     }
 
     fun updatePosition() {
+        if (isDead) return
+
         val headPosition = body[0].position
         val newHeadPosition = Position(headPosition.x + direction.dx * size.width,
                 headPosition.y + direction.dy * size.height)
