@@ -32,20 +32,18 @@ class MenuPanel(val window: Window) : JPanel(), KeyListener {
 
 
     override fun paintComponent(g: Graphics?) {
-        super.paintComponent(g)
-        g!!
-        println("paint " + currentState)
+        super.paintComponent(g!!)
         val padding: Int = (height * 0.15).toInt()
         val height: Int = ((height - 2 * padding) / MenuState.values().size)
         MenuState.values().forEachIndexed { index, state ->
-            var font = roboto
-            if (currentState == index) {
-                g.color = selectedColor
-                font = roboto.deriveFont(Font.BOLD)
-            } else {
-                g.color = normalColor
-                font = roboto.deriveFont(Font.PLAIN)
-            }
+            val font =
+                    if (currentState == index) {
+                        g.color = selectedColor
+                        roboto.deriveFont(Font.BOLD)
+                    } else {
+                        g.color = normalColor
+                        roboto.deriveFont(Font.PLAIN)
+                    }
             GraphicsUtils.drawCenteredString(g, state.toString(), Rectangle(0, padding + height * index, width, height), font)
         }
     }

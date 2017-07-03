@@ -2,7 +2,8 @@ package com.grudus.snake.game
 
 import com.grudus.snake.game.board.Board
 import com.grudus.snake.game.entity.Direction
-import com.grudus.snake.game.entity.Snake
+import com.grudus.snake.game.entity.food.Foods
+import com.grudus.snake.game.entity.snake.Snake
 import com.grudus.snake.utils.FontUtils
 import com.grudus.snake.utils.GraphicsUtils
 import java.awt.Color
@@ -17,7 +18,8 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
     private val backgroundColor = Color(171, 152, 122)
     private val transparentBackground = Color(42, 42, 42, 200)
     private val board = Board(columns, rows)
-    private var snake = Snake(tileDimension, Position(tileDimension.width * 3, tileDimension.height * 3), board)
+    private val foods = Foods()
+    private var snake = newSnake()
     private val normalSpeed = Speed.FAST
     private val roboto = FontUtils.roboto(32)
 
@@ -32,11 +34,13 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
     }
 
     fun restart() {
-        snake = Snake(tileDimension, Position(tileDimension.width * 3, tileDimension.height * 3), board)
-        timer.start()
+        snake = newSnake()
+        foods.clean()
+        startSnakeMovement()
     }
 
     fun startSnakeMovement() {
+        foods.newFoodAtRandom(board, snake, tileDimension)
         if (!snake.isDead)
             timer.start()
     }
@@ -48,12 +52,13 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
     override fun paintComponent(g: Graphics?) {
         fillBackground(g!!)
         board.draw(g, tileDimension)
+        snake.draw(g)
+        foods.drawAll(g, tileDimension)
         if (snake.isDead) {
             fillBackground(g, transparentBackground)
             g.color = Color.RED
             GraphicsUtils.drawCenteredString(g, "GAME OVER", visibleRect, roboto)
         }
-        snake.draw(g)
     }
 
     private fun fillBackground(graphics: Graphics, color: Color = backgroundColor) {
@@ -61,6 +66,14 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
         graphics.fillRect(0, 0, width, height)
     }
 
+
+    private fun newSnake() = Snake(tileDimension, Position(tileDimension.width * 5, tileDimension.height * 5), board, foods)
+
+    fun keyReleased(e: KeyEvent) {
+        when (e.keyCode) {
+            VK_SPACE -> timer.delay = normalSpeed.delayTime
+        }
+    }
 
     fun updateView() {
         snake.updatePosition()
@@ -77,12 +90,6 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
             VK_RIGHT, VK_D -> snake.direction = Direction.RIGHT
             VK_SPACE -> timer.delay = Speed.EXTRA_FAST.delayTime
             VK_ENTER -> if (snake.isDead) restart()
-        }
-    }
-
-    fun keyReleased(e: KeyEvent) {
-        when (e.keyCode) {
-            VK_SPACE -> timer.delay = normalSpeed.delayTime
         }
     }
 }

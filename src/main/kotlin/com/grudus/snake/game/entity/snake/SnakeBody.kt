@@ -1,4 +1,4 @@
-package com.grudus.snake.game.entity
+package com.grudus.snake.game.entity.snake
 
 import com.grudus.snake.game.Position
 import java.awt.Color

@@ -7,6 +7,7 @@ import java.awt.Graphics
 class Board(val columns: Int, val rows: Int) {
     private val board = Array(rows, { Array(columns, { Field.EMPTY }) })
 
+
     init {
         board[0] = board[0].map { Field.BLOCK }.toTypedArray()
         board[rows - 1] = board[rows - 1].map { Field.BLOCK }.toTypedArray()
@@ -15,6 +16,8 @@ class Board(val columns: Int, val rows: Int) {
             row[columns - 1] = Field.BLOCK
         }
     }
+
+    fun isAccessible(row: Int, column: Int) = !board[row][column].isBlocking
 
     fun draw(g: Graphics, tileDimension: Dimension) {
         for (row in 0..rows - 1)
