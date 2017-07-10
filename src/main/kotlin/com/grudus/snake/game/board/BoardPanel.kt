@@ -11,6 +11,7 @@ import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.event.KeyEvent
 import java.awt.event.KeyEvent.*
+import java.util.*
 import javax.swing.JPanel
 import javax.swing.Timer
 
@@ -22,6 +23,8 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
     private var snake = newSnake()
     private val normalSpeed = Speed.FAST
     private val roboto = FontUtils.roboto(32)
+    
+    private val movementQueue = LinkedList<Direction>()
 
     private val timer = Timer(normalSpeed.delayTime, {
         updateView()
@@ -76,6 +79,7 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
     }
 
     fun updateView() {
+        snake.direction = movementQueue.poll() ?: snake.direction
         snake.updatePosition()
         if (snake.isDead)
             timer.stop()
@@ -84,10 +88,10 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
 
     fun keyPressed(e: KeyEvent) {
         when (e.keyCode) {
-            VK_UP, VK_W -> snake.direction = Direction.UP
-            VK_DOWN, VK_S -> snake.direction = Direction.DOWN
-            VK_LEFT, VK_A -> snake.direction = Direction.LEFT
-            VK_RIGHT, VK_D -> snake.direction = Direction.RIGHT
+            VK_UP, VK_W -> movementQueue.add(Direction.UP)
+            VK_DOWN, VK_S -> movementQueue.add(Direction.DOWN)
+            VK_LEFT, VK_A -> movementQueue.add(Direction.LEFT)
+            VK_RIGHT, VK_D -> movementQueue.add(Direction.RIGHT)
             VK_SPACE -> timer.delay = Speed.EXTRA_FAST.delayTime
             VK_ENTER -> if (snake.isDead) restart()
         }
