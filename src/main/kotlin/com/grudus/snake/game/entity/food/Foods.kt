@@ -5,6 +5,7 @@ import com.grudus.snake.game.board.Board
 import com.grudus.snake.game.entity.snake.Snake
 import java.awt.Dimension
 import java.awt.Graphics
+import java.awt.image.ImageObserver
 import java.util.*
 
 class Foods {
@@ -16,7 +17,8 @@ class Foods {
     fun newFood(position: Position) = positionToFood.put(position, possibleFoods[random.nextInt(possibleFoods.size)])
     fun containsFood(position: Position) = positionToFood.containsKey(position)
     operator fun get(position: Position) = positionToFood[position]
-    fun drawAll(g: Graphics, tileSize: Dimension) = positionToFood.forEach { position, food -> food.draw(g, tileSize, position) }
+    fun drawAll(g: Graphics, tileSize: Dimension, imageObserver: ImageObserver) =
+            positionToFood.forEach { position, food -> food.draw(g, tileSize, position, imageObserver) }
     fun newFoodAtRandom(board: Board, snake: Snake, tileSize: Dimension) : Food? {
         var position: Position?
         do {

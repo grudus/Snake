@@ -56,7 +56,7 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
         fillBackground(g!!)
         board.draw(g, tileDimension)
         snake.draw(g)
-        foods.drawAll(g, tileDimension)
+        foods.drawAll(g, tileDimension, this)
         if (snake.isDead) {
             fillBackground(g, transparentBackground)
             g.color = Color.RED
