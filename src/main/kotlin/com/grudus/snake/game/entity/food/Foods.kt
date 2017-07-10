@@ -19,18 +19,20 @@ class Foods {
     operator fun get(position: Position) = positionToFood[position]
     fun drawAll(g: Graphics, tileSize: Dimension, imageObserver: ImageObserver) =
             positionToFood.forEach { position, food -> food.draw(g, tileSize, position, imageObserver) }
-    fun newFoodAtRandom(board: Board, snake: Snake, tileSize: Dimension) : Food? {
+
+    fun newFoodAtRandom(board: Board, snake: Snake, tileSize: Dimension): Food? {
         var position: Position?
         do {
             val col = random.nextInt(board.columns)
             val row = random.nextInt(board.rows)
             position = Position(col * tileSize.width, row * tileSize.height)
-        } while (!board.isAccessible(row, col) && !snake.isBody(position!!))
 
-        return newFood(position!!)
+        } while (!board.isAccessible(row, col) || snake.isBody(position!!))
+
+        return newFood(position)
     }
 
-    fun  interact(newHeadPosition: Position, snake: Snake) {
+    fun interact(newHeadPosition: Position, snake: Snake) {
         get(newHeadPosition)?.interact(snake)
         positionToFood.remove(newHeadPosition)
     }
