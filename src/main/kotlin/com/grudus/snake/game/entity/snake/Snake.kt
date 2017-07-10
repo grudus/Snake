@@ -12,7 +12,7 @@ class Snake(val size: Dimension, private val startPosition: Position = Position(
     var isDead = false
     var direction = Direction.RIGHT
         set(value) {
-            if (direction.canChangeDirection(value))
+            if (field.canChangeDirection(value))
                 field = value
         }
 
