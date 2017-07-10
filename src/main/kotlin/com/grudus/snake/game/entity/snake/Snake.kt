@@ -45,6 +45,11 @@ class Snake(val size: Dimension, private val startPosition: Position = Position(
             return
         }
 
+        if (isBody(newHeadPosition)) {
+            isDead = true
+            return
+        }
+
         if (foods.containsFood(newHeadPosition)) {
             foods.interact(newHeadPosition, this)
             foods.newFoodAtRandom(board, this, size)
