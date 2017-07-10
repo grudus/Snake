@@ -6,9 +6,15 @@ import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Image
 import java.awt.image.ImageObserver
+import java.io.File
+import javax.imageio.ImageIO
 
-abstract class Food {
+abstract class Food(imagePath: String) {
     protected var image: Image? = null
+
+    init {
+        image = ImageIO.read(File(javaClass.classLoader.getResource("img/food/$imagePath").toURI()))
+    }
 
     abstract fun interact(snake: Snake)
     abstract fun draw(g: Graphics, tileSize: Dimension, position: Position, imageObserver: ImageObserver)

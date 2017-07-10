@@ -8,8 +8,8 @@ import java.awt.image.ImageObserver
 import java.io.File
 import javax.imageio.ImageIO
 
-enum class Field(val isBlocking: Boolean, private val imagePath: String? = null) {
-    BLOCK(true, "bricks.png") {
+enum class Field(val isBlocking: Boolean, imagePath: String? = null) {
+    BLOCK(true, "wall.png") {
         override fun draw(g: Graphics, size: Dimension, position: Position, imageObserver: ImageObserver) {
             g.color = Color.BLACK
             g.drawImage(image!!, position.x - size.width / 2, position.y - size.height / 2, size.width, size.height, imageObserver)
