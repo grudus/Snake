@@ -54,7 +54,7 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
 
     override fun paintComponent(g: Graphics?) {
         fillBackground(g!!)
-        board.draw(g, tileDimension)
+        board.draw(g, tileDimension, this)
         snake.draw(g)
         foods.drawAll(g, tileDimension, this)
         if (snake.isDead) {

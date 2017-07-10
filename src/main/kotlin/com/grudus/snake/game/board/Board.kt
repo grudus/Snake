@@ -3,6 +3,7 @@ package com.grudus.snake.game.board
 import com.grudus.snake.game.Position
 import java.awt.Dimension
 import java.awt.Graphics
+import java.awt.image.ImageObserver
 
 class Board(val columns: Int, val rows: Int) {
     private val board = Array(rows, { Array(columns, { Field.EMPTY }) })
@@ -19,10 +20,10 @@ class Board(val columns: Int, val rows: Int) {
 
     fun isAccessible(row: Int, column: Int) = !board[row][column].isBlocking
 
-    fun draw(g: Graphics, tileDimension: Dimension) {
+    fun draw(g: Graphics, tileDimension: Dimension, imageObserver: ImageObserver) {
         for (row in 0..rows - 1)
             for (col in 0..columns - 1)
-                board[row][col].draw(g, tileDimension, Position(col * tileDimension.width, row * tileDimension.height))
+                board[row][col].draw(g, tileDimension, Position(col * tileDimension.width, row * tileDimension.height), imageObserver)
 
     }
 
