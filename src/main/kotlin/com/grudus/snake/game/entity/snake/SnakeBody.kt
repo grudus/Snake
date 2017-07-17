@@ -1,16 +1,18 @@
 package com.grudus.snake.game.entity.snake
 
+import com.grudus.snake.game.Index
 import com.grudus.snake.game.Position
+import com.grudus.snake.game.entity.Direction
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
 
-class SnakeBody(position: Position, size: Dimension) : SnakeTile(position, size) {
+class SnakeBody(index: Index, direction: Direction) : SnakeTile(index, direction) {
     val color = Color.decode("#0F1626")!!
 
-    override fun draw(g: Graphics) {
+    override fun draw(g: Graphics, tileSize: Dimension) {
         g.color = color
-        super.defaultFill(g)
+        super.defaultFill(g, tileSize)
     }
 
 }

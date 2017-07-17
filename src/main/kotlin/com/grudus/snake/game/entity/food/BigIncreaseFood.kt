@@ -1,5 +1,6 @@
 package com.grudus.snake.game.entity.food
 
+import com.grudus.snake.game.Index
 import com.grudus.snake.game.Position
 import com.grudus.snake.game.entity.snake.Snake
 import java.awt.Color
@@ -14,7 +15,8 @@ class BigIncreaseFood : Food("salad.png") {
         snake.increaseBody()
     }
 
-    override fun draw(g: Graphics, tileSize: Dimension, position: Position, imageObserver: ImageObserver) {
+    override fun draw(g: Graphics, tileSize: Dimension, index: Index, imageObserver: ImageObserver) {
+        val position = Position.middleOf(index, tileSize)
         g.color = Color.BLUE
         g.drawImage(image, position.x - tileSize.width / 2, position.y - tileSize.height / 2, tileSize.width, tileSize.height, imageObserver)
     }

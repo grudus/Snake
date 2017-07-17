@@ -1,5 +1,6 @@
 package com.grudus.snake.game.entity.food
 
+import com.grudus.snake.game.Index
 import com.grudus.snake.game.Position
 import com.grudus.snake.game.board.Board
 import com.grudus.snake.game.entity.snake.Snake
@@ -9,31 +10,32 @@ import java.awt.image.ImageObserver
 import java.util.*
 
 class Foods {
-    private val positionToFood = mutableMapOf<Position, Food>()
+    private val indexToFood = mutableMapOf<Index, Food>()
     private val random = Random()
     private val possibleFoods = listOf(NormalFood(), NormalFood(), BigIncreaseFood())
 
-    fun clean() = positionToFood.clear()
-    fun newFood(position: Position) = positionToFood.put(position, possibleFoods[random.nextInt(possibleFoods.size)])
-    fun containsFood(position: Position) = positionToFood.containsKey(position)
-    operator fun get(position: Position) = positionToFood[position]
-    fun drawAll(g: Graphics, tileSize: Dimension, imageObserver: ImageObserver) =
-            positionToFood.forEach { position, food -> food.draw(g, tileSize, position, imageObserver) }
+    fun clean() = indexToFood.clear()
+    fun newFood(index: Index) = indexToFood.put(index, possibleFoods[random.nextInt(possibleFoods.size)])
+    fun containsFood(index: Index) = indexToFood.containsKey(index)
+    operator fun get(index: Index) = indexToFood[index]
 
-    fun newFoodAtRandom(board: Board, snake: Snake, tileSize: Dimension): Food? {
-        var position: Position?
+    fun drawAll(g: Graphics, tileSize: Dimension, imageObserver: ImageObserver) =
+            indexToFood.forEach { index, food -> food.draw(g, tileSize, index, imageObserver) }
+
+    fun newFoodAtRandom(board: Board, snake: Snake): Food? {
+        var index: Index?
         do {
             val col = random.nextInt(board.columns)
             val row = random.nextInt(board.rows)
-            position = Position(col * tileSize.width, row * tileSize.height)
+            index = Index(row, col)
 
-        } while (!board.isAccessible(row, col) || snake.isBody(position!!))
+        } while (!board.isAccessible(row, col) || snake.isBody(index!!))
 
-        return newFood(position)
+        return newFood(index)
     }
 
-    fun interact(newHeadPosition: Position, snake: Snake) {
-        get(newHeadPosition)?.interact(snake)
-        positionToFood.remove(newHeadPosition)
+    fun interact(index: Index, snake: Snake) {
+        get(index)?.interact(snake)
+        indexToFood.remove(index)
     }
 }

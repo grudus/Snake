@@ -43,7 +43,7 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
     }
 
     fun startSnakeMovement() {
-        foods.newFoodAtRandom(board, snake, tileDimension)
+        foods.newFoodAtRandom(board, snake)
         if (!snake.isDead)
             timer.start()
     }
@@ -70,7 +70,7 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
     }
 
 
-    private fun newSnake() = Snake(tileDimension, Position(tileDimension.width * 5, tileDimension.height * 5), board, foods)
+    private fun newSnake() = Snake(tileDimension, Index(5, 5), board, foods)
 
     fun keyReleased(e: KeyEvent) {
         when (e.keyCode) {

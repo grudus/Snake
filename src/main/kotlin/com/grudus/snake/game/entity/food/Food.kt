@@ -1,5 +1,6 @@
 package com.grudus.snake.game.entity.food
 
+import com.grudus.snake.game.Index
 import com.grudus.snake.game.Position
 import com.grudus.snake.game.entity.snake.Snake
 import java.awt.Dimension
@@ -17,5 +18,5 @@ abstract class Food(imagePath: String) {
     }
 
     abstract fun interact(snake: Snake)
-    abstract fun draw(g: Graphics, tileSize: Dimension, position: Position, imageObserver: ImageObserver)
+    abstract fun draw(g: Graphics, tileSize: Dimension, index: Index, imageObserver: ImageObserver)
 }

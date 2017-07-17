@@ -1,5 +1,6 @@
 package com.grudus.snake.game.board
 
+import com.grudus.snake.game.Index
 import com.grudus.snake.game.Position
 import java.awt.Dimension
 import java.awt.Graphics
@@ -23,13 +24,11 @@ class Board(val columns: Int, val rows: Int) {
     fun draw(g: Graphics, tileDimension: Dimension, imageObserver: ImageObserver) {
         for (row in 0..rows - 1)
             for (col in 0..columns - 1)
-                board[row][col].draw(g, tileDimension, Position(col * tileDimension.width, row * tileDimension.height), imageObserver)
+                board[row][col].draw(g, tileDimension, Position(col * tileDimension.width + tileDimension.width / 2, row * tileDimension.height + tileDimension.height / 2), imageObserver)
 
     }
 
-    fun couldBlock(newHeadPosition: Position, size: Dimension): Boolean {
-        val row = newHeadPosition.y / size.height
-        val col = newHeadPosition.x / size.width
-        return board[row][col].isBlocking
+    fun couldBlock(index: Index): Boolean {
+        return board[index.row][index.col].isBlocking
     }
 }
