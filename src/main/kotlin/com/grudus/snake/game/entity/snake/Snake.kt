@@ -1,7 +1,6 @@
 package com.grudus.snake.game.entity.snake
 
 import com.grudus.snake.game.Index
-import com.grudus.snake.game.Position
 import com.grudus.snake.game.board.Board
 import com.grudus.snake.game.entity.Direction
 import com.grudus.snake.game.entity.food.Foods
@@ -56,8 +55,8 @@ class Snake(val size: Dimension, private val startIndex: Index = Index(0, 0), va
         }
 
         for (i in body.size-1 downTo 1)
-            body[i].changePosition(body[i - 1].index)
-        body[0].changePosition(newHeadIndex)
+            body[i].changePosition(body[i - 1].index, body[i-1].direction)
+        body[0].changePosition(newHeadIndex, direction)
     }
 
     fun isBody(index: Index) = body.any { body ->
