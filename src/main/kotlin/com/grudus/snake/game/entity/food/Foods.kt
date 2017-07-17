@@ -1,7 +1,6 @@
 package com.grudus.snake.game.entity.food
 
 import com.grudus.snake.game.Index
-import com.grudus.snake.game.Position
 import com.grudus.snake.game.board.Board
 import com.grudus.snake.game.entity.snake.Snake
 import java.awt.Dimension
@@ -12,10 +11,24 @@ import java.util.*
 class Foods {
     private val indexToFood = mutableMapOf<Index, Food>()
     private val random = Random()
-    private val possibleFoods = listOf(NormalFood(), NormalFood(), BigIncreaseFood())
 
     fun clean() = indexToFood.clear()
-    fun newFood(index: Index) = indexToFood.put(index, possibleFoods[random.nextInt(possibleFoods.size)])
+    fun newFood(index: Index) = indexToFood.put(index, randomFood())
+
+    private fun  randomFood(): Food {
+        val foodsSortedByProbability = Food.values().sortedBy{ it.probability }
+        val probabilitySum = foodsSortedByProbability.sumBy { it.probability }
+        val random = random.nextInt(probabilitySum)
+        var tempSum = 0
+        println("random: " + random)
+        for (i in 0..foodsSortedByProbability.size) {
+            tempSum += foodsSortedByProbability[i].probability
+            if (tempSum > random)
+                return foodsSortedByProbability[i]
+        }
+        throw CannotFindFoodException()
+    }
+
     fun containsFood(index: Index) = indexToFood.containsKey(index)
     operator fun get(index: Index) = indexToFood[index]
 
