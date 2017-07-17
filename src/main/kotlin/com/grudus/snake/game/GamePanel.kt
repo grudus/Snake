@@ -4,11 +4,13 @@ import com.grudus.snake.Window
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Dimension
+import java.awt.event.ComponentEvent
+import java.awt.event.ComponentListener
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import javax.swing.JPanel
 
-class GamePanel(private val window: Window) : JPanel(), KeyListener {
+class GamePanel(private val window: Window) : JPanel(), KeyListener, ComponentListener {
     private val backgroundColor = Color.RED
     private var isPaused = false
 
@@ -17,6 +19,7 @@ class GamePanel(private val window: Window) : JPanel(), KeyListener {
     init {
         background = backgroundColor
         addKeyListener(this)
+        addComponentListener(this)
         isFocusable = true
 
         val borderLayout = BorderLayout()
@@ -51,4 +54,11 @@ class GamePanel(private val window: Window) : JPanel(), KeyListener {
 
 
     override fun keyTyped(e: KeyEvent?) {}
+
+    override fun componentMoved(e: ComponentEvent?) {}
+    override fun componentResized(e: ComponentEvent?) {
+        boardPanel.changeSize()
+    }
+    override fun componentHidden(e: ComponentEvent?) {}
+    override fun componentShown(e: ComponentEvent?) {}
 }

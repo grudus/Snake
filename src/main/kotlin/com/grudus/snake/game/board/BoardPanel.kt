@@ -96,4 +96,9 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
             VK_ENTER -> if (snake.isDead) restart()
         }
     }
+
+    fun changeSize() {
+        this.tileDimension.width = width / columns
+        this.tileDimension.height = height / rows
+    }
 }
