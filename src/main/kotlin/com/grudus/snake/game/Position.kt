@@ -6,9 +6,14 @@ data class Position(var x: Int, var y: Int) {
     constructor(position: Position) : this(position.x, position.y)
 
     companion object {
-        fun middleOf(index: Index, tileSize: Dimension) = Position(
-                index.col * tileSize.width + tileSize.width / 2,
-                index.row * tileSize.height + tileSize.height / 2
+        fun middleOf(index: Index, size: Dimension) = Position(
+                index.col * size.width + size.width / 2,
+                index.row * size.height + size.height / 2
+        )
+
+        fun startOf(index: Index, size: Dimension) = Position(
+                index.col * size.width,
+                index.row * size.height
         )
     }
 

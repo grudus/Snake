@@ -20,7 +20,6 @@ class Foods {
         val probabilitySum = foodsSortedByProbability.sumBy { it.probability }
         val random = random.nextInt(probabilitySum)
         var tempSum = 0
-        println("random: " + random)
         for (i in 0..foodsSortedByProbability.size) {
             tempSum += foodsSortedByProbability[i].probability
             if (tempSum > random)

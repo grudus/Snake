@@ -4,10 +4,11 @@ import com.grudus.snake.game.Index
 import com.grudus.snake.game.board.Board
 import com.grudus.snake.game.entity.Direction
 import com.grudus.snake.game.entity.food.Foods
+import java.awt.Component
 import java.awt.Dimension
 import java.awt.Graphics
 
-class Snake(val size: Dimension, private val startIndex: Index = Index(0, 0), val board: Board, val foods: Foods) {
+class Snake(val size: Dimension, private val startIndex: Index = Index(0, 0), val board: Board, val foods: Foods, private val component: Component) {
     private val initialLength = 5
     var isDead = false
     var direction = Direction.RIGHT
@@ -30,7 +31,7 @@ class Snake(val size: Dimension, private val startIndex: Index = Index(0, 0), va
     }
 
     fun draw(g: Graphics) {
-        body.forEach { it.draw(g, size) }
+        body.forEach { it.draw(g, size, component) }
     }
 
     fun updatePosition() {

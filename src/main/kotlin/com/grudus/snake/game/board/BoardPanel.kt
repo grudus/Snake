@@ -70,7 +70,7 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
     }
 
 
-    private fun newSnake() = Snake(tileDimension, Index(5, 5), board, foods)
+    private fun newSnake() = Snake(tileDimension, Index(5, 5), board, foods, this)
 
     fun keyReleased(e: KeyEvent) {
         when (e.keyCode) {
