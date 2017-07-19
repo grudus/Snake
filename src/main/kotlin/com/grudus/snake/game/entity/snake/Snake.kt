@@ -33,6 +33,11 @@ class Snake(val size: Dimension, private val startIndex: Index, val board: Board
         body.add(body.size - 1, SnakeBody(Index(body.last().index), body.last().direction))
     }
 
+    fun decreaseBody() {
+        if (bodyLength() > 3)
+            body.removeAt(body.size - 2)
+    }
+
     fun draw(g: Graphics) {
         body.forEach { it.draw(g, size, component) }
     }
@@ -61,7 +66,7 @@ class Snake(val size: Dimension, private val startIndex: Index, val board: Board
         body[0].direction = direction
         for (i in body.size - 1 downTo 1) {
             body[i].changePosition(body[i - 1].index, body[i - 1].direction)
-            body[i-1].previousTileDirection = body[i].direction
+            body[i - 1].previousTileDirection = body[i].direction
         }
         body[0].changePosition(newHeadIndex, direction)
     }
@@ -69,4 +74,6 @@ class Snake(val size: Dimension, private val startIndex: Index, val board: Board
     fun isBody(index: Index) = body.any { body ->
         body.index == index
     }
+
+    fun bodyLength() = body.size
 }

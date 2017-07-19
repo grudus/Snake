@@ -63,6 +63,7 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
             fillBackground(g, transparentBackground)
             g.color = Color.RED
             GraphicsUtils.drawCenteredString(g, "GAME OVER", visibleRect, roboto)
+            println("Snake len: " + snake.bodyLength())
         }
     }
 
