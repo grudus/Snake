@@ -31,9 +31,18 @@ enum class Food(imagePath: String, val probability: Int) {
     BEER("beer.png", 5) {
         override fun draw(g: Graphics, tileSize: Dimension, index: Index, imageObserver: ImageObserver) = defaultDraw(g, tileSize, index, imageObserver)
 
-        override fun interact(snake: Snake) {
-            snake.decreaseBody()
-        }
+        override fun interact(snake: Snake) = snake.decreaseBody()
+
+    },
+    WATER("water.png", 3) {
+        override fun draw(g: Graphics, tileSize: Dimension, index: Index, imageObserver: ImageObserver) = defaultDraw(g, tileSize, index, imageObserver)
+
+        override fun interact(snake: Snake) = snake.increaseSpeed()
+    },
+    HAMBURGER("hamburger.png", 3) {
+        override fun draw(g: Graphics, tileSize: Dimension, index: Index, imageObserver: ImageObserver) = defaultDraw(g, tileSize, index, imageObserver)
+
+        override fun interact(snake: Snake) = snake.decreaseSpeed()
     }
     ;
 

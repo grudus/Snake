@@ -22,12 +22,11 @@ class BoardPanel(val gamePanel: GamePanel, val board: Board, val tileDimension: 
     private val transparentBackground = Color(42, 42, 42, 200)
     private val foods = Foods()
     private var snake = newSnake()
-    private val normalSpeed = Speed.FAST
     private val roboto = FontUtils.roboto(32)
     
     private val movementQueue = LinkedList<Direction>()
 
-    private val timer = Timer(normalSpeed.delayTime, {
+    private val timer = Timer(snake.currentSpeed.delayTime, {
         updateView()
     })
 
@@ -39,6 +38,7 @@ class BoardPanel(val gamePanel: GamePanel, val board: Board, val tileDimension: 
 
     fun restart() {
         snake = newSnake()
+        updateTime()
         foods.clean()
         startSnakeMovement()
     }
@@ -72,12 +72,16 @@ class BoardPanel(val gamePanel: GamePanel, val board: Board, val tileDimension: 
     }
 
 
-    private fun newSnake() = Snake(tileDimension, Index(5, 5), board, foods, this)
+    private fun newSnake() = Snake(tileDimension, Index(5, 5), board, foods, this, Speed.MEDIUM)
 
     fun keyReleased(e: KeyEvent) {
         when (e.keyCode) {
-            VK_SPACE -> timer.delay = normalSpeed.delayTime
+            VK_SPACE -> timer.delay = snake.currentSpeed.delayTime
         }
+    }
+
+    fun updateTime() {
+        timer.delay = snake.currentSpeed.delayTime
     }
 
     fun updateView() {

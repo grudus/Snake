@@ -1,16 +1,18 @@
 package com.grudus.snake.game.entity.snake
 
 import com.grudus.snake.game.Index
+import com.grudus.snake.game.Speed
 import com.grudus.snake.game.board.Board
+import com.grudus.snake.game.board.BoardPanel
 import com.grudus.snake.game.entity.Direction
 import com.grudus.snake.game.entity.food.Foods
-import java.awt.Component
 import java.awt.Dimension
 import java.awt.Graphics
 
-class Snake(val size: Dimension, private val startIndex: Index, val board: Board, val foods: Foods, private val component: Component) {
+class Snake(val size: Dimension, private val startIndex: Index, val board: Board, val foods: Foods, private val boardPanel: BoardPanel, val normalSpeed: Speed) {
     private val initialLength = 5
     var isDead = false
+    var currentSpeed = normalSpeed
     var direction = Direction.RIGHT
         set(value) {
             if (field.canChangeDirection(value))
@@ -38,8 +40,18 @@ class Snake(val size: Dimension, private val startIndex: Index, val board: Board
             body.removeAt(body.size - 2)
     }
 
+    fun increaseSpeed() {
+        currentSpeed = currentSpeed.nextSpeed()
+        boardPanel.updateTime()
+    }
+    fun decreaseSpeed() {
+        currentSpeed = currentSpeed.previousSpeed()
+        boardPanel.updateTime()
+    }
+
+
     fun draw(g: Graphics) {
-        body.forEach { it.draw(g, size, component) }
+        body.forEach { it.draw(g, size, boardPanel) }
     }
 
     fun updatePosition() {
