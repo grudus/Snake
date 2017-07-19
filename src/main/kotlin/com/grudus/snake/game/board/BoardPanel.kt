@@ -1,6 +1,8 @@
-package com.grudus.snake.game
+package com.grudus.snake.game.board
 
-import com.grudus.snake.game.board.Board
+import com.grudus.snake.game.GamePanel
+import com.grudus.snake.game.Index
+import com.grudus.snake.game.Speed
 import com.grudus.snake.game.entity.Direction
 import com.grudus.snake.game.entity.food.Foods
 import com.grudus.snake.game.entity.snake.Snake

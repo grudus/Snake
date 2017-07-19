@@ -10,6 +10,10 @@ class RotatedImageIcon(val imageIcon: ImageIcon) {
 
     constructor(image: Image) : this(ImageIcon(image))
 
+    init {
+        println("Created rotated image instance")
+    }
+
 
     fun draw(component: Component, g: Graphics, size: Dimension, position: Position, direction: Direction) {
         resizeImage(size)

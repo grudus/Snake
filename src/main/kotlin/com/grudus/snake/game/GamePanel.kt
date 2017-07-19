@@ -1,6 +1,7 @@
 package com.grudus.snake.game
 
 import com.grudus.snake.Window
+import com.grudus.snake.game.board.BoardPanel
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Dimension

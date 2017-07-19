@@ -8,7 +8,7 @@ import java.awt.Component
 import java.awt.Dimension
 import java.awt.Graphics
 
-class Snake(val size: Dimension, private val startIndex: Index = Index(0, 0), val board: Board, val foods: Foods, private val component: Component) {
+class Snake(val size: Dimension, private val startIndex: Index, val board: Board, val foods: Foods, private val component: Component) {
     private val initialLength = 5
     var isDead = false
     var direction = Direction.RIGHT
@@ -23,11 +23,14 @@ class Snake(val size: Dimension, private val startIndex: Index = Index(0, 0), va
         val body: MutableList<SnakeTile> = mutableListOf()
         body.add(SnakeHead(startIndex, Direction.RIGHT))
 
-        return (1..initialLength).mapTo(body) { SnakeBody(startIndex - Index(0, it), Direction.RIGHT) }
+        return (1..initialLength).mapTo(body) {
+            if (it == initialLength) SnakeTail(startIndex - Index(0, it), Direction.RIGHT)
+            else SnakeBody(startIndex - Index(0, it), Direction.RIGHT)
+        }
     }
 
     fun increaseBody() {
-        body.add(SnakeBody(Index(body.last().index), body.last().direction))
+        body.add(body.size - 1, SnakeBody(Index(body.last().index), body.last().direction))
     }
 
     fun draw(g: Graphics) {
@@ -55,8 +58,11 @@ class Snake(val size: Dimension, private val startIndex: Index = Index(0, 0), va
             foods.newFoodAtRandom(board, this)
         }
 
-        for (i in body.size-1 downTo 1)
-            body[i].changePosition(body[i - 1].index, body[i-1].direction)
+        body[0].direction = direction
+        for (i in body.size - 1 downTo 1) {
+            body[i].changePosition(body[i - 1].index, body[i - 1].direction)
+            body[i-1].previousTileDirection = body[i].direction
+        }
         body[0].changePosition(newHeadIndex, direction)
     }
 

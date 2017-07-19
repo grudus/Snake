@@ -19,4 +19,6 @@ data class Position(var x: Int, var y: Int) {
 
     operator fun plus(position: Position) = Position(x + position.x, y + position.y)
     operator fun minus(position: Position) = Position(x - position.x, y - position.y)
+    operator fun dec() = Position(x - 1, y - 1)
+    operator fun inc() = Position(x + 1, y + 1)
 }
