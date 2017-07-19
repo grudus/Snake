@@ -6,18 +6,9 @@ import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.image.ImageObserver
 
-class Board(val columns: Int, val rows: Int) {
-    private val board = Array(rows, { Array(columns, { Field.EMPTY }) })
-
-
-    init {
-        board[0] = board[0].map { Field.BLOCK }.toTypedArray()
-        board[rows - 1] = board[rows - 1].map { Field.BLOCK }.toTypedArray()
-        board.forEach { row ->
-            row[0] = Field.BLOCK
-            row[columns - 1] = Field.BLOCK
-        }
-    }
+class Board(private var board: Array<Array<Field>>) {
+    val rows = board.size
+    val columns = board[0].size
 
     fun isAccessible(row: Int, column: Int) = !board[row][column].isBlocking
 

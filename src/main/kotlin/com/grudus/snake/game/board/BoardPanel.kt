@@ -17,10 +17,9 @@ import java.util.*
 import javax.swing.JPanel
 import javax.swing.Timer
 
-class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val tileDimension: Dimension) : JPanel() {
+class BoardPanel(val gamePanel: GamePanel, val board: Board, val tileDimension: Dimension) : JPanel() {
     private val backgroundColor = Color(171, 152, 122)
     private val transparentBackground = Color(42, 42, 42, 200)
-    private val board = Board(columns, rows)
     private val foods = Foods()
     private var snake = newSnake()
     private val normalSpeed = Speed.FAST
@@ -101,7 +100,7 @@ class BoardPanel(val gamePanel: GamePanel, val columns: Int, val rows: Int, val 
     }
 
     fun changeSize() {
-        this.tileDimension.width = width / columns
-        this.tileDimension.height = height / rows
+        this.tileDimension.width = width / board.columns
+        this.tileDimension.height = height / board.rows
     }
 }
