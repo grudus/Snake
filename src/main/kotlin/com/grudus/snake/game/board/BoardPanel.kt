@@ -6,6 +6,7 @@ import com.grudus.snake.game.Speed
 import com.grudus.snake.game.entity.Direction
 import com.grudus.snake.game.entity.food.Foods
 import com.grudus.snake.game.entity.snake.Snake
+import com.grudus.snake.utils.Colors
 import com.grudus.snake.utils.FontUtils
 import com.grudus.snake.utils.GraphicsUtils
 import java.awt.Color
@@ -17,9 +18,9 @@ import java.util.*
 import javax.swing.JPanel
 import javax.swing.Timer
 
-class BoardPanel(val gamePanel: GamePanel, val board: Board, val tileDimension: Dimension) : JPanel() {
-    private val backgroundColor = Color(171, 152, 122)
-    private val transparentBackground = Color(42, 42, 42, 200)
+class BoardPanel(private val gamePanel: GamePanel, private val board: Board, private val tileDimension: Dimension) : JPanel() {
+    private val backgroundColor = Colors.BOARD_BACKGROUND
+    private val transparentBackground = Colors.TRANSPARENT_BLACK
     private val foods = Foods()
     private var snake = newSnake()
     private val roboto = FontUtils.roboto(32)
@@ -56,7 +57,7 @@ class BoardPanel(val gamePanel: GamePanel, val board: Board, val tileDimension: 
     override fun paintComponent(g: Graphics?) {
         fillBackground(g!!)
         board.draw(g, tileDimension, this)
-        snake.draw(g)
+        snake.draw(g, tileDimension, this)
         foods.drawAll(g, tileDimension, this)
         if (snake.isDead) {
             fillBackground(g, transparentBackground)
@@ -72,7 +73,7 @@ class BoardPanel(val gamePanel: GamePanel, val board: Board, val tileDimension: 
     }
 
 
-    private fun newSnake() = Snake(tileDimension, Index(5, 5), board, foods, this, Speed.MEDIUM)
+    private fun newSnake() = Snake(Index(5, 5), Speed.MEDIUM, this)
 
     fun keyReleased(e: KeyEvent) {
         when (e.keyCode) {
@@ -86,7 +87,7 @@ class BoardPanel(val gamePanel: GamePanel, val board: Board, val tileDimension: 
 
     fun updateView() {
         snake.direction = movementQueue.poll() ?: snake.direction
-        snake.updatePosition()
+        snake.updatePosition(board, foods)
         if (snake.isDead)
             timer.stop()
         repaint()

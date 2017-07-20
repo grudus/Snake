@@ -34,23 +34,19 @@ enum class Food(imagePath: String, val probability: Int) {
         override fun interact(snake: Snake) = snake.decreaseBody()
 
     },
-    WATER("water.png", 3) {
+    WATER("water.png", 2) {
         override fun draw(g: Graphics, tileSize: Dimension, index: Index, imageObserver: ImageObserver) = defaultDraw(g, tileSize, index, imageObserver)
 
         override fun interact(snake: Snake) = snake.increaseSpeed()
     },
-    HAMBURGER("hamburger.png", 3) {
+    HAMBURGER("hamburger.png", 2) {
         override fun draw(g: Graphics, tileSize: Dimension, index: Index, imageObserver: ImageObserver) = defaultDraw(g, tileSize, index, imageObserver)
 
         override fun interact(snake: Snake) = snake.decreaseSpeed()
     }
     ;
 
-    var image: Image? = null
-
-    init {
-        image = ImageIO.read(File(javaClass.classLoader.getResource("img/food/$imagePath").toURI()))
-    }
+    protected val image: Image = ImageIO.read(File(javaClass.classLoader.getResource("img/food/$imagePath").toURI()))
 
     abstract fun interact(snake: Snake)
     abstract fun draw(g: Graphics, tileSize: Dimension, index: Index, imageObserver: ImageObserver)

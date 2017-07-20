@@ -6,13 +6,14 @@ import com.grudus.snake.game.board.Board
 import com.grudus.snake.game.board.BoardPanel
 import com.grudus.snake.game.entity.Direction
 import com.grudus.snake.game.entity.food.Foods
+import java.awt.Component
 import java.awt.Dimension
 import java.awt.Graphics
 
-class Snake(val size: Dimension, private val startIndex: Index, val board: Board, val foods: Foods, private val boardPanel: BoardPanel, val normalSpeed: Speed) {
+class Snake(private val startIndex: Index, startSpeed: Speed, private val boardPanel: BoardPanel) {
     private val initialLength = 5
     var isDead = false
-    var currentSpeed = normalSpeed
+    var currentSpeed = startSpeed
     var direction = Direction.RIGHT
         set(value) {
             if (field.canChangeDirection(value))
@@ -50,22 +51,17 @@ class Snake(val size: Dimension, private val startIndex: Index, val board: Board
     }
 
 
-    fun draw(g: Graphics) {
-        body.forEach { it.draw(g, size, boardPanel) }
+    fun draw(g: Graphics, size: Dimension, component: Component) {
+        body.forEach { it.draw(g, size, component) }
     }
 
-    fun updatePosition() {
+    fun updatePosition(board: Board, foods: Foods) {
         if (isDead) return
 
         val headIndex = body[0].index
         val newHeadIndex = Index(headIndex.row + direction.dy, headIndex.col + direction.dx)
 
-        if (board.couldBlock(newHeadIndex)) {
-            isDead = true
-            return
-        }
-
-        if (isBody(newHeadIndex)) {
+        if (board.couldBlock(newHeadIndex) || isBody(newHeadIndex)) {
             isDead = true
             return
         }
