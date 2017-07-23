@@ -1,7 +1,7 @@
 package com.grudus.snake.game
 
-enum class Speed(val delayTime: Int) {
-    EXTRA_SLOW(512), SLOW(256), MEDIUM(128), FAST(64), EXTRA_FAST(32)
+enum class Speed(val delayTime: Int, val label: String) {
+    EXTRA_SLOW(512, "Turtle"), SLOW(256, "Slow"), MEDIUM(128, "Normal"), FAST(64, "Fast"), EXTRA_FAST(32, "Light speed")
     ;
     companion object {
         fun findByDelayTime(delayTime: Int) = values().find { it.delayTime == delayTime }

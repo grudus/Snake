@@ -2,6 +2,7 @@ package com.grudus.snake.menu
 
 
 import com.grudus.snake.Window
+import com.grudus.snake.utils.Colors
 import com.grudus.snake.utils.FontUtils
 import com.grudus.snake.utils.GraphicsUtils
 import java.awt.Color
@@ -18,7 +19,7 @@ class MenuPanel(val window: Window) : JPanel(), KeyListener {
     private var currentState = 0
     private val roboto = FontUtils.roboto(24)
 
-    private val backgroundColor = Color.decode("#f5f5f5")
+    private val backgroundColor = Colors.MENU_BACKGROUND
     private val normalColor = Color.decode("#242424")
     private val selectedColor = Color.decode("#ff533d")
 

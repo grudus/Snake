@@ -19,7 +19,7 @@ class ControlPanel(private val gamePanel: GamePanel, val startSpeed: Speed) : JP
     private val pointsLabel = JLabel("Points: ")
     private val time = JLabel("0")
     private val timeLabel = JLabel("Time: ")
-    private val speed = JLabel(startSpeed.name)
+    private val speed = JLabel(startSpeed.label)
     private val speedLabel = JLabel("Speed: ")
     private val size = JLabel("5")
     private val sizeLabel = JLabel("Size: ")
@@ -36,7 +36,7 @@ class ControlPanel(private val gamePanel: GamePanel, val startSpeed: Speed) : JP
         layout = GridBagLayout()
         setupComponents()
 
-        background = Colors.CONTROL_PANEL_BACKGROUND
+        background = Colors.MENU_BACKGROUND
         timer.start()
 
     }
@@ -46,7 +46,7 @@ class ControlPanel(private val gamePanel: GamePanel, val startSpeed: Speed) : JP
         size.text = "0"
         time.text = "0"
         points.text = "0"
-        speed.text = startSpeed.name
+        speed.text = startSpeed.label
         timer.start()
 
     }
@@ -56,7 +56,7 @@ class ControlPanel(private val gamePanel: GamePanel, val startSpeed: Speed) : JP
     }
 
     fun updateSpeed(speed: Speed) {
-        this.speed.text = speed.name
+        this.speed.text = speed.label
     }
 
     fun  updateSnakeSize(bodyLength: Int) {
