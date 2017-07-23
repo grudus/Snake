@@ -2,6 +2,7 @@ package com.grudus.snake.game.board
 
 import com.grudus.snake.game.GamePanel
 import com.grudus.snake.game.Index
+import com.grudus.snake.game.LifeCycle
 import com.grudus.snake.game.Speed
 import com.grudus.snake.game.entity.Direction
 import com.grudus.snake.game.entity.food.Foods
@@ -18,12 +19,16 @@ import java.util.*
 import javax.swing.JPanel
 import javax.swing.Timer
 
-class BoardPanel(private val gamePanel: GamePanel, private val board: Board, private val tileDimension: Dimension) : JPanel() {
+
+
+// TODO 23.07.2017 Add some kind of event listeners for communicate with control panel and pause/restart
+class BoardPanel(private val gamePanel: GamePanel, private val board: Board, private val tileDimension: Dimension) : JPanel(), LifeCycle {
     private val backgroundColor = Colors.BOARD_BACKGROUND
     private val transparentBackground = Colors.TRANSPARENT_BLACK
     private val foods = Foods()
     private var snake = newSnake()
     private val roboto = FontUtils.roboto(32)
+
     
     private val movementQueue = LinkedList<Direction>()
 
@@ -37,7 +42,12 @@ class BoardPanel(private val gamePanel: GamePanel, private val board: Board, pri
         isFocusable = true
     }
 
-    fun restart() {
+    override fun stop() {
+        timer.stop()
+    }
+
+    override fun restart() {
+        gamePanel.restart()
         snake = newSnake()
         updateTime()
         foods.clean()
@@ -83,13 +93,15 @@ class BoardPanel(private val gamePanel: GamePanel, private val board: Board, pri
 
     fun updateTime() {
         timer.delay = snake.currentSpeed.delayTime
+        gamePanel.updateTime(snake.currentSpeed)
     }
 
     fun updateView() {
         snake.direction = movementQueue.poll() ?: snake.direction
         snake.updatePosition(board, foods)
+        gamePanel.updateSnakeSize(snake.bodyLength())
         if (snake.isDead)
-            timer.stop()
+            stop()
         repaint()
     }
 
@@ -107,5 +119,9 @@ class BoardPanel(private val gamePanel: GamePanel, private val board: Board, pri
     fun changeSize() {
         this.tileDimension.width = width / board.columns
         this.tileDimension.height = height / board.rows
+    }
+
+    fun  addPoints(points: Int) {
+        gamePanel.addPoints(points)
     }
 }

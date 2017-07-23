@@ -67,6 +67,7 @@ class Snake(private val startIndex: Index, startSpeed: Speed, private val boardP
         }
 
         if (foods.containsFood(newHeadIndex)) {
+            boardPanel.addPoints(foods[newHeadIndex]!!.points)
             foods.interact(newHeadIndex, this)
             foods.newFoodAtRandom(board, this)
         }

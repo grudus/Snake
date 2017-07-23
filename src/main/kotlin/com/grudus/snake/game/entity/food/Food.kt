@@ -10,8 +10,8 @@ import java.awt.image.ImageObserver
 import java.io.File
 import javax.imageio.ImageIO
 
-enum class Food(imagePath: String, val probability: Int) {
-    NORMAL("tomato.png", 5) {
+enum class Food(imagePath: String, val points: Int, val probability: Int) {
+    NORMAL("tomato.png", 1, 5) {
         override fun draw(g: Graphics, tileSize: Dimension, index: Index, imageObserver: ImageObserver) {
             val position = Position.middleOf(index, tileSize)
             g.drawImage(image, position.x - tileSize.width / 2 + 3, position.y - tileSize.height / 2 + 3, tileSize.width - 6, tileSize.height - 6, imageObserver)
@@ -19,7 +19,7 @@ enum class Food(imagePath: String, val probability: Int) {
 
         override fun interact(snake: Snake) = snake.increaseBody()
     },
-    BIG_FOOD("salad.png", 3) {
+    BIG_FOOD("salad.png", 3, 3) {
         override fun draw(g: Graphics, tileSize: Dimension, index: Index, imageObserver: ImageObserver) = defaultDraw(g, tileSize, index, imageObserver)
 
         override fun interact(snake: Snake) {
@@ -28,18 +28,18 @@ enum class Food(imagePath: String, val probability: Int) {
             snake.increaseBody()
         }
     },
-    BEER("beer.png", 5) {
+    BEER("beer.png", 1, 5) {
         override fun draw(g: Graphics, tileSize: Dimension, index: Index, imageObserver: ImageObserver) = defaultDraw(g, tileSize, index, imageObserver)
 
         override fun interact(snake: Snake) = snake.decreaseBody()
 
     },
-    WATER("water.png", 2) {
+    WATER("water.png", 2, 2) {
         override fun draw(g: Graphics, tileSize: Dimension, index: Index, imageObserver: ImageObserver) = defaultDraw(g, tileSize, index, imageObserver)
 
         override fun interact(snake: Snake) = snake.increaseSpeed()
     },
-    HAMBURGER("hamburger.png", 2) {
+    HAMBURGER("hamburger.png", 3, 2) {
         override fun draw(g: Graphics, tileSize: Dimension, index: Index, imageObserver: ImageObserver) = defaultDraw(g, tileSize, index, imageObserver)
 
         override fun interact(snake: Snake) = snake.decreaseSpeed()
