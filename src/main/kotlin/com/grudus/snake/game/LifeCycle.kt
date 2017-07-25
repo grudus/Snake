@@ -1,6 +1,8 @@
 package com.grudus.snake.game
 
 interface LifeCycle {
-    fun restart()
-    fun stop()
+    fun onInit()
+    fun onPause()
+    fun onResume()
+    fun onEnd()
 }

@@ -19,69 +19,73 @@ import javax.swing.JFrame
 import javax.swing.JFrame.EXIT_ON_CLOSE
 import javax.swing.UIManager
 
-class Window(title: String, val width: Int = 800, val height: Int = 600) {
+class Window(title: String, val width: Int = 800, val height: Int = 680) {
     val settings = CurrentSettings(this.javaClass.classLoader.getResource("application.properties").path)
     private val frame = JFrame(title)
 
     init {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
-        val roboto = Font.createFont(Font.TRUETYPE_FONT, javaClass.classLoader.getResourceAsStream("font/Roboto-Regular.ttf"));
+        registerFont()
+        initFrameSize()
+        frame.defaultCloseOperation = EXIT_ON_CLOSE
+        frame.contentPane = MenuPanel(this)
+    }
+
+    fun show() {
+        frame.isVisible = true
+    }
+
+    fun getBoard(): Board =
+            if (settings.boardFilePath == null) DefaultMapGenerator().generate(settings.boardSize ?: Index(8, 8))
+            else SnMapGenerator().generate(File(settings.boardFilePath))
+
+    fun onStateChange(menuState: MenuState) {
+        when (menuState) {
+            MenuState.EXIT -> closeWindow()
+            MenuState.PLAY -> startGame()
+            MenuState.SETTINGS -> openSettings()
+            MenuState.HELP -> println("Halp!")
+        }
+        frame.validate()
+        frame.repaint()
+    }
+
+    fun showMenuPanel() {
+        val panel = MenuPanel(this)
+        frame.contentPane = panel
+        panel.isFocusable = true
+        panel.requestFocus()
+        frame.validate()
+        frame.repaint()
+    }
+
+
+    private fun openSettings() {
+        frame.contentPane = SettingsPanel(this)
+    }
+
+    private fun startGame() {
+        val panel = GamePanel(getBoard())
+        frame.contentPane = panel
+        panel.onInit()
+    }
+
+    private fun closeWindow() = frame.dispatchEvent(WindowEvent(frame, WindowEvent.WINDOW_CLOSING))
+
+    private fun registerFont() {
+        val roboto = Font.createFont(Font.TRUETYPE_FONT, javaClass.classLoader.getResourceAsStream("font/Roboto-Regular.ttf"))
         GraphicsEnvironment.getLocalGraphicsEnvironment()
                 .registerFont(roboto)
-        frame.defaultCloseOperation = EXIT_ON_CLOSE
+    }
+
+    private fun initFrameSize() {
         frame.size = Dimension(width, height)
         frame.minimumSize = Dimension(width / 2, height / 2)
         centerOnTheScreen()
-        frame.contentPane = MenuPanel(this)
     }
 
     private fun centerOnTheScreen() {
         val screenSize = Toolkit.getDefaultToolkit().screenSize
         frame.setLocation(screenSize.width / 2 - width / 2, screenSize.height / 2 - height / 2)
     }
-
-
-    fun show() {
-        frame.isVisible = true
-    }
-
-    fun onStateChange(menuState: MenuState) {
-        println(menuState)
-        when (menuState) {
-            MenuState.EXIT -> closeWindow()
-            MenuState.PLAY -> changeView(GamePanel(this))
-            MenuState.SETTINGS -> openSettings()
-        }
-    }
-
-    private fun openSettings() {
-        frame.contentPane = SettingsPanel(this)
-        frame.validate()
-        frame.repaint()
-    }
-
-    private fun changeView(panel: GamePanel) {
-        frame.contentPane = panel
-        frame.validate()
-        frame.repaint()
-        panel.start()
-    }
-
-    fun showMenuPanel() {
-        val panel = MenuPanel(this)
-        frame.contentPane = panel
-        frame.validate()
-        frame.repaint()
-        panel.isFocusable = true
-        panel.requestFocus()
-
-    }
-
-    private fun closeWindow() = frame.dispatchEvent(WindowEvent(frame, WindowEvent.WINDOW_CLOSING))
-
-    // TODO 24.07.2017 get from settings
-    fun getBoard(): Board =
-            if (settings.boardFilePath == null) DefaultMapGenerator().generate(settings.boardSize ?: Index(8, 8))
-            else SnMapGenerator().generate(File(settings.boardFilePath))
-
 }

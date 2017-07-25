@@ -1,6 +1,9 @@
 package com.grudus.snake.game
 
-import com.grudus.snake.Window
+import com.grudus.snake.event.EventBus
+import com.grudus.snake.event.GameEventListener
+import com.grudus.snake.event.PauseEvent
+import com.grudus.snake.event.ResumeEvent
 import com.grudus.snake.game.board.Board
 import com.grudus.snake.game.board.BoardPanel
 import com.grudus.snake.game.panel.ControlPanel
@@ -13,71 +16,75 @@ import java.awt.event.KeyListener
 import javax.swing.JPanel
 import kotlin.properties.Delegates
 
-class GamePanel(private val window: Window) : JPanel(), KeyListener, ComponentListener {
-    private var isPaused = false
-    @Suppress("UNCHECKED_CAST")
-    private val board: Board = window.getBoard()
+class GamePanel(board: Board) : JPanel(), KeyListener, ComponentListener, LifeCycle {
+    private val initialSnakeSize = 5
 
-    private val controlPanel = ControlPanel(this, Speed.MEDIUM)
+    private val controlPanel = ControlPanel(this, Speed.MEDIUM, initialSnakeSize)
     private var boardPanel by Delegates.notNull<BoardPanel>()
 
+    private var isPaused = false
+
     init {
-        boardPanel = BoardPanel(this, board, Dimension(30, 30))
+        GameEventListener(this).startListening()
+        boardPanel = BoardPanel(board, Dimension(30, 30), initialSnakeSize)
         addKeyListener(this)
         addComponentListener(this)
-        isFocusable = true
 
-        val borderLayout = BorderLayout()
-        super.setLayout(borderLayout)
+        super.setLayout(BorderLayout())
         add(boardPanel, BorderLayout.CENTER)
         add(controlPanel, BorderLayout.NORTH)
-
     }
 
-    fun start() {
+    override fun onInit() {
+        isFocusable = true
         requestFocus()
-        boardPanel.startSnakeMovement()
+        controlPanel.onInit()
+        boardPanel.onInit()
+    }
+
+    override fun onPause() {
+        controlPanel.onPause()
+        boardPanel.onPause()
+    }
+
+    override fun onResume() {
+        controlPanel.onResume()
+        boardPanel.onResume()
+    }
+
+    override fun onEnd() {
+        controlPanel.onEnd()
+        boardPanel.onEnd()
     }
 
     override fun keyPressed(e: KeyEvent?) {
-        when(e!!.keyCode) {
+        when (e!!.keyCode) {
             KeyEvent.VK_ESCAPE -> togglePause()
         }
         if (!isPaused) boardPanel.keyPressed(e)
     }
 
-    private fun togglePause() {
-        if (isPaused)
-            boardPanel.startSnakeMovement()
-        else
-            boardPanel.stopSnakeMovement()
-        isPaused = !isPaused
-    }
+    override fun keyReleased(e: KeyEvent?) = boardPanel.keyReleased(e!!)
 
-    fun restart() {
-        controlPanel.restart()
-    }
+    override fun componentResized(e: ComponentEvent?) = boardPanel.changeSize()
 
-
-    override fun keyReleased(e: KeyEvent?) {
-        boardPanel.keyReleased(e!!)
-    }
-
-    fun  updateTime(speed: Speed) {
+    fun updateTime(speed: Speed) {
         controlPanel.updateSpeed(speed)
+        boardPanel.updateSnakeSpeed()
     }
-    fun  updateSnakeSize(bodyLength: Int) {
-        controlPanel.updateSnakeSize(bodyLength)
-    }
-    fun  addPoints(points: Int) {
-        controlPanel.addPoints(points)
+
+    fun updateSnakeSize(bodyLength: Int) = controlPanel.updateSnakeSize(bodyLength)
+
+    fun addPoints(points: Int) = controlPanel.addPoints(points)
+
+    private fun togglePause() {
+        if (isPaused) EventBus.publish(ResumeEvent())
+        else EventBus.publish(PauseEvent())
+        isPaused = !isPaused
     }
 
     override fun keyTyped(e: KeyEvent?) {}
     override fun componentMoved(e: ComponentEvent?) {}
-    override fun componentResized(e: ComponentEvent?) {
-        boardPanel.changeSize()
-    }
     override fun componentHidden(e: ComponentEvent?) {}
     override fun componentShown(e: ComponentEvent?) {}
 }

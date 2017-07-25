@@ -10,5 +10,7 @@ class Colors {
         val BORDER_COLOR = Color(221, 221, 221)
         val BORDER_TITLE_COLOR = Color(142, 142, 142)
         val  ERROR: Color = Color.RED
+        val  MENU_ITEM_NORMAL = Color.decode("#242424")!!
+        val  MENU_ITEM_SELECTED = Color.decode("#ff533d")!!
     }
 }

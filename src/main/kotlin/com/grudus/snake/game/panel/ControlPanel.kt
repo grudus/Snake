@@ -14,18 +14,18 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.Timer
 
-class ControlPanel(private val gamePanel: GamePanel, val startSpeed: Speed) : JPanel(), LifeCycle {
-    private val points = JLabel("0")
+class ControlPanel(private val gamePanel: GamePanel, val startSpeed: Speed, val initialSize: Int) : JPanel(), LifeCycle {
+    private val points = JLabel()
     private val pointsLabel = JLabel("Points: ")
-    private val time = JLabel("0")
+    private val time = JLabel()
     private val timeLabel = JLabel("Time: ")
-    private val speed = JLabel(startSpeed.label)
+    private val speed = JLabel()
     private val speedLabel = JLabel("Speed: ")
-    private val size = JLabel("5")
+    private val size = JLabel()
     private val sizeLabel = JLabel("Size: ")
 
     private val grid = GridBagConstraints()
-    private val timer = Timer(1000, {updateTime()})
+    private val timer = Timer(1000, { updateTime() })
 
     private var timeInSeconds = 0
 
@@ -35,23 +35,27 @@ class ControlPanel(private val gamePanel: GamePanel, val startSpeed: Speed) : JP
         preferredSize = size
         layout = GridBagLayout()
         setupComponents()
-
         background = Colors.MENU_BACKGROUND
-        timer.start()
-
     }
 
-    override fun restart() {
+    override fun onInit() {
         timeInSeconds = 0
-        size.text = "0"
+        size.text = initialSize.toString()
         time.text = "0"
         points.text = "0"
         speed.text = startSpeed.label
         timer.start()
-
     }
 
-    override fun stop() {
+    override fun onPause() {
+        timer.stop()
+    }
+
+    override fun onResume() {
+        timer.start()
+    }
+
+    override fun onEnd() {
         timer.stop()
     }
 
@@ -59,7 +63,7 @@ class ControlPanel(private val gamePanel: GamePanel, val startSpeed: Speed) : JP
         this.speed.text = speed.label
     }
 
-    fun  updateSnakeSize(bodyLength: Int) {
+    fun updateSnakeSize(bodyLength: Int) {
         this.size.text = bodyLength.toString()
     }
 
@@ -68,23 +72,20 @@ class ControlPanel(private val gamePanel: GamePanel, val startSpeed: Speed) : JP
         timeInSeconds++
     }
 
-    private fun setupComponents() {
-        grid.weightx = 0.5
-        grid.gridy = 0
-        arrayOf(pointsLabel, points, speedLabel, speed, timeLabel, time, sizeLabel, size).forEachIndexed{index, label ->
-            label.font = FontUtils.roboto(16)
-            grid.gridx = index
-            grid.anchor = if (index % 2 == 0) LINE_END else LINE_START
-            add(label, grid)
-        }
-
-    }
-
-    fun  addPoints(points: Int) {
+    fun addPoints(points: Int) {
         val current = this.points.text.toInt()
         val actual = current + points
         this.points.text = actual.toString()
     }
 
-
+    private fun setupComponents() {
+        grid.weightx = 0.5
+        grid.gridy = 0
+        arrayOf(pointsLabel, points, speedLabel, speed, timeLabel, time, sizeLabel, size).forEachIndexed { index, label ->
+            label.font = FontUtils.roboto(16)
+            grid.gridx = index
+            grid.anchor = if (index % 2 == 0) LINE_END else LINE_START
+            add(label, grid)
+        }
+    }
 }

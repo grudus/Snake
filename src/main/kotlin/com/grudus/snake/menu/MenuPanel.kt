@@ -5,7 +5,6 @@ import com.grudus.snake.Window
 import com.grudus.snake.utils.Colors
 import com.grudus.snake.utils.FontUtils
 import com.grudus.snake.utils.GraphicsUtils
-import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics
 import java.awt.Rectangle
@@ -16,12 +15,10 @@ import javax.swing.JPanel
 
 
 class MenuPanel(val window: Window) : JPanel(), KeyListener {
-    private var currentState = 0
     private val roboto = FontUtils.roboto(24)
-
     private val backgroundColor = Colors.MENU_BACKGROUND
-    private val normalColor = Color.decode("#242424")
-    private val selectedColor = Color.decode("#ff533d")
+
+    private var currentState = 0
 
     init {
         background = backgroundColor
@@ -29,7 +26,6 @@ class MenuPanel(val window: Window) : JPanel(), KeyListener {
         isFocusable = true
         requestFocus()
         addKeyListener(this)
-
     }
 
 
@@ -40,10 +36,10 @@ class MenuPanel(val window: Window) : JPanel(), KeyListener {
         MenuState.values().forEachIndexed { index, state ->
             val font =
                     if (currentState == index) {
-                        g.color = selectedColor
+                        g.color = Colors.MENU_ITEM_SELECTED
                         roboto.deriveFont(Font.BOLD)
                     } else {
-                        g.color = normalColor
+                        g.color = Colors.MENU_ITEM_NORMAL
                         roboto.deriveFont(Font.PLAIN)
                     }
             GraphicsUtils.drawCenteredString(g, state.toString(), Rectangle(0, padding + height * index, width, height), font)
@@ -51,15 +47,12 @@ class MenuPanel(val window: Window) : JPanel(), KeyListener {
     }
 
 
-    override fun keyTyped(e: KeyEvent?) {
-    }
-
     override fun keyPressed(e: KeyEvent?) {
         changeCurrentState(e!!)
     }
 
     override fun keyReleased(e: KeyEvent?) {
-        if (e!!.keyCode == KeyEvent.VK_ENTER)
+        if (e?.keyCode == KeyEvent.VK_ENTER)
             window.onStateChange(MenuState.values()[currentState])
     }
 
@@ -73,5 +66,8 @@ class MenuPanel(val window: Window) : JPanel(), KeyListener {
             currentState = MenuState.values().size - Math.abs(currentState)
         }
         repaint()
+    }
+
+    override fun keyTyped(e: KeyEvent?) {
     }
 }

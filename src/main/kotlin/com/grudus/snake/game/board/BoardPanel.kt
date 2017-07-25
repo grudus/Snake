@@ -1,6 +1,7 @@
 package com.grudus.snake.game.board
 
-import com.grudus.snake.game.GamePanel
+import com.grudus.snake.event.EventBus
+import com.grudus.snake.event.NewGameEvent
 import com.grudus.snake.game.Index
 import com.grudus.snake.game.LifeCycle
 import com.grudus.snake.game.Speed
@@ -18,72 +19,70 @@ import java.awt.event.KeyEvent.*
 import java.util.*
 import javax.swing.JPanel
 import javax.swing.Timer
+import kotlin.properties.Delegates
 
 
-
-// TODO 23.07.2017 Add some kind of event listeners for communicate with control panel and pause/restart
-class BoardPanel(private val gamePanel: GamePanel, private val board: Board, private val tileDimension: Dimension) : JPanel(), LifeCycle {
-    private val backgroundColor = Colors.BOARD_BACKGROUND
+class BoardPanel(private val board: Board, private val tileDimension: Dimension, private val initialSnakeSize: Int) : JPanel(), LifeCycle {
+    private val initialSnakeSpeed = Speed.MEDIUM
     private val transparentBackground = Colors.TRANSPARENT_BLACK
     private val foods = Foods()
-    private var snake = newSnake()
-    private val roboto = FontUtils.roboto(32)
-
-    
     private val movementQueue = LinkedList<Direction>()
+    
+    private val timer = Timer(initialSnakeSpeed.delayTime, { updateView() })
 
-    private val timer = Timer(snake.currentSpeed.delayTime, {
-        updateView()
-    })
+    private var snake: Snake by Delegates.notNull<Snake>()
+    private var isGameEnded = false
 
 
     init {
-        background = backgroundColor
+        background = Colors.BOARD_BACKGROUND
+    }
+
+    override fun onInit() {
         isFocusable = true
-    }
-
-    override fun stop() {
-        timer.stop()
-    }
-
-    override fun restart() {
-        gamePanel.restart()
-        snake = newSnake()
-        updateTime()
-        foods.clean()
-        startSnakeMovement()
-    }
-
-    fun startSnakeMovement() {
+        snake = Snake(Index(5, 5), initialSnakeSpeed, initialSnakeSize)
+        updateSnakeSpeed()
         foods.newFoodAtRandom(board, snake)
-        if (!snake.isDead)
-            timer.start()
+        timer.restart()
+        isGameEnded = false
     }
 
-    fun stopSnakeMovement() {
+    override fun onPause() {
         timer.stop()
+    }
+
+    override fun onResume() {
+        timer.start()
+    }
+
+    override fun onEnd() {
+        isGameEnded = true
+        timer.stop()
+        foods.clean()
     }
 
     override fun paintComponent(g: Graphics?) {
-        fillBackground(g!!)
-        board.draw(g, tileDimension, this)
-        snake.draw(g, tileDimension, this)
-        foods.drawAll(g, tileDimension, this)
-        if (snake.isDead) {
-            fillBackground(g, transparentBackground)
-            g.color = Color.RED
-            GraphicsUtils.drawCenteredString(g, "GAME OVER", visibleRect, roboto)
-            println("Snake len: " + snake.bodyLength())
+        if (isGameEnded)
+            drawEndGame(g!!)
+        else {
+            fillBackground(g!!, background)
+            board.draw(g, tileDimension, this)
+            snake.draw(g, tileDimension, this)
+            foods.drawAll(g, tileDimension, this)
         }
     }
 
-    private fun fillBackground(graphics: Graphics, color: Color = backgroundColor) {
-        graphics.color = color
-        graphics.fillRect(0, 0, width, height)
+
+    fun keyPressed(e: KeyEvent) {
+        when (e.keyCode) {
+            VK_UP, VK_W -> addMovement(Direction.UP)
+            VK_DOWN, VK_S -> addMovement(Direction.DOWN)
+            VK_LEFT, VK_A -> addMovement(Direction.LEFT)
+            VK_RIGHT, VK_D -> addMovement(Direction.RIGHT)
+            VK_SPACE -> timer.delay = Speed.EXTRA_FAST.delayTime
+            VK_ENTER -> if (isGameEnded) EventBus.publish(NewGameEvent())
+        }
     }
-
-
-    private fun newSnake() = Snake(Index(5, 5), Speed.MEDIUM, this)
 
     fun keyReleased(e: KeyEvent) {
         when (e.keyCode) {
@@ -91,37 +90,34 @@ class BoardPanel(private val gamePanel: GamePanel, private val board: Board, pri
         }
     }
 
-    fun updateTime() {
-        timer.delay = snake.currentSpeed.delayTime
-        gamePanel.updateTime(snake.currentSpeed)
-    }
-
     fun updateView() {
         snake.direction = movementQueue.poll() ?: snake.direction
         snake.updatePosition(board, foods)
-        gamePanel.updateSnakeSize(snake.bodyLength())
-        if (snake.isDead)
-            stop()
         repaint()
     }
 
-    fun keyPressed(e: KeyEvent) {
-        when (e.keyCode) {
-            VK_UP, VK_W -> movementQueue.add(Direction.UP)
-            VK_DOWN, VK_S -> movementQueue.add(Direction.DOWN)
-            VK_LEFT, VK_A -> movementQueue.add(Direction.LEFT)
-            VK_RIGHT, VK_D -> movementQueue.add(Direction.RIGHT)
-            VK_SPACE -> timer.delay = Speed.EXTRA_FAST.delayTime
-            VK_ENTER -> if (snake.isDead) restart()
-        }
+    fun updateSnakeSpeed() {
+        timer.delay = snake.currentSpeed.delayTime
     }
 
     fun changeSize() {
         this.tileDimension.width = width / board.columns
         this.tileDimension.height = height / board.rows
     }
+    
+    private fun addMovement(direction: Direction) {
+        if (movementQueue.size < 3)
+            movementQueue.add(direction)
+    }
 
-    fun  addPoints(points: Int) {
-        gamePanel.addPoints(points)
+    private fun drawEndGame(g: Graphics) {
+        fillBackground(g, transparentBackground)
+        g.color = Color.RED
+        GraphicsUtils.drawCenteredString(g, "GAME OVER", visibleRect, FontUtils.roboto(32))
+    }
+
+    private fun fillBackground(graphics: Graphics, color: Color) {
+        graphics.color = color
+        graphics.fillRect(0, 0, width, height)
     }
 }

@@ -3,7 +3,6 @@ package com.grudus.snake.game
 import java.awt.Dimension
 
 data class Position(var x: Int, var y: Int) {
-    constructor(position: Position) : this(position.x, position.y)
 
     companion object {
         fun middleOf(index: Index, size: Dimension) = Position(
