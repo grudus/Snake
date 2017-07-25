@@ -29,6 +29,7 @@ class MenuPanel(val window: Window) : JPanel(), KeyListener {
         isFocusable = true
         requestFocus()
         addKeyListener(this)
+
     }
 
 
