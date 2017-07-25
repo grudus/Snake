@@ -2,16 +2,18 @@ package com.grudus.snake.utils
 
 import com.grudus.snake.game.Position
 import com.grudus.snake.game.entity.Direction
+import org.slf4j.LoggerFactory
 import java.awt.*
 import java.awt.geom.AffineTransform
 import javax.swing.ImageIcon
 
 class RotatedImageIcon(val imageIcon: ImageIcon) {
+    private val log = LoggerFactory.getLogger(javaClass)
 
     constructor(image: Image) : this(ImageIcon(image))
 
     init {
-        println("Created rotated image instance")
+        log.debug("Created rotated image instance")
     }
 
 

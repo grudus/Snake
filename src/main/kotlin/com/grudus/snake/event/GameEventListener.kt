@@ -1,43 +1,45 @@
 package com.grudus.snake.event
 
 import com.grudus.snake.game.GamePanel
+import org.slf4j.LoggerFactory
 
 class GameEventListener(private val gamePanel: GamePanel) {
+    private val log = LoggerFactory.getLogger(javaClass)
 
     fun startListening() {
         EventBus.listen(NewGameEvent::class.java).subscribe {
-            println("Request for new game")
+            log.debug("Request for new game")
             gamePanel.onInit()
         }
 
         EventBus.listen(PauseEvent::class.java).subscribe {
-            println("Request for pause")
+            log.debug("Request for pause")
             gamePanel.onPause()
         }
 
         EventBus.listen(ResumeEvent::class.java).subscribe {
-            println("Request for resume after pause")
+            log.debug("Request for resume after pause")
             gamePanel.onResume()
         }
 
 
         EventBus.listen(GameEndEvent::class.java).subscribe {
-            println("Game over :(")
+            log.debug("Game over :(")
             gamePanel.onEnd()
         }
 
         EventBus.listen(FoodEatenEvent::class.java).subscribe {
-            println("Food ${it.food} eaten")
+            log.debug("Food ${it.food} eaten")
             gamePanel.addPoints(it.food.points)
         }
 
         EventBus.listen(ChangeSpeedEvent::class.java).subscribe {
-            println("change speed to " + it.currentSpeed)
+            log.debug("change speed to " + it.currentSpeed)
             gamePanel.updateTime(it.currentSpeed)
         }
 
         EventBus.listen(UpdateSnakeSizeEvent::class.java).subscribe {
-            println("change snake size to " + it.currentSize)
+            log.debug("change snake size to " + it.currentSize)
             gamePanel.updateSnakeSize(it.currentSize)
         }
     }
