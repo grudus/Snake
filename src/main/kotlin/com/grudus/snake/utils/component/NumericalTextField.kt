@@ -1,7 +1,9 @@
 package com.grudus.snake.utils.component
 
 import com.grudus.snake.utils.Colors
+import com.grudus.snake.utils.runOnce
 import javax.swing.JTextField
+import javax.swing.Timer
 import javax.swing.border.LineBorder
 import javax.swing.text.AttributeSet
 import javax.swing.text.Document
@@ -9,40 +11,28 @@ import javax.swing.text.DocumentFilter
 import javax.swing.text.PlainDocument
 
 class NumericalTextField(doc: Document?, text: String?, columns: Int) : JTextField(doc, text, columns) {
-    constructor(text: String?) : this(null, text, 0)
-    constructor(columns: Int) : this(null, null, columns)
-    constructor(text: String?, columns: Int) : this(null, text, columns)
-    constructor() : this(null, null, 0)
-
     private val errorBorder = LineBorder(Colors.ERROR)
     private val normalBorder = super.getBorder()
+
+    constructor(columns: Int) : this(null, null, columns)
 
     init {
         (document as PlainDocument).documentFilter = object : DocumentFilter() {
             override fun replace(fb: FilterBypass?, offset: Int, length: Int, insertedText: String?, attrs: AttributeSet?) {
-                if (insertedText != null && isNumber(insertedText)) {
+                if (isNumber(insertedText))
                     super.replace(fb, offset, length, insertedText, attrs)
-                    normalBorder()
-                }
-                else errorBorder()
-            }
-
-            override fun remove(fb: FilterBypass?, offset: Int, length: Int) {
-                super.remove(fb, offset, length)
-                normalBorder()
+                else
+                    showErrorBorder()
             }
         }
     }
 
-    private fun errorBorder() {
-        this.border = errorBorder
+    private fun showErrorBorder() {
+        border = errorBorder
+        Timer(100) {
+            border = normalBorder
+        }.runOnce()
     }
 
-    private fun normalBorder() {
-        this.border = normalBorder
-    }
-
-    private fun isNumber(text: String) = text.all { Character.isDigit(it) }
-
-
+    private fun isNumber(text: String?) = text != null && text.all { Character.isDigit(it) }
 }

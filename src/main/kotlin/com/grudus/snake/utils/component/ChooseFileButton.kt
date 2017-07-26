@@ -10,38 +10,39 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.filechooser.FileNameExtensionFilter
 
-class ChooseFileButton(private val text: String) : JPanel() {
-
+class ChooseFileButton(text: String) : JPanel() {
     private val button = JButton(text)
     private val label = JLabel()
     private var currentDir: File? = null
     private var selectedFile: File? = null
 
     init {
-        add(button)
-        add(label)
-        
-        button.font = FontUtils.roboto(button.font.size)
-        label.font = FontUtils.roboto(label.font.size)
-
+        initViews()
 
         button.addActionListener { _ ->
-            if (!isEnabled)
-                return@addActionListener
+            if (!isEnabled) return@addActionListener
+
             val chooser = JFileChooser()
             chooser.currentDirectory = currentDir
             chooser.fileFilter = FileNameExtensionFilter("sn maps (*.sn)", "sn")
 
             val selected = chooser.showOpenDialog(this)
-
-
-            if (selected == JFileChooser.APPROVE_OPTION && chooser.selectedFile.hasExtension("sn")) {
-                label.text = chooser.selectedFile.path.truncate(12)
-                currentDir = chooser.currentDirectory
-                selectedFile = chooser.selectedFile
-            }
-
+            if (selected == JFileChooser.APPROVE_OPTION && chooser.selectedFile.hasExtension("sn"))
+                handleSelectedFile(chooser)
         }
+    }
+
+    private fun initViews() {
+        add(button)
+        add(label)
+        button.font = FontUtils.roboto(button.font.size)
+        label.font = FontUtils.roboto(label.font.size)
+    }
+
+    private fun handleSelectedFile(chooser: JFileChooser) {
+        label.text = chooser.selectedFile.path.truncate(12)
+        currentDir = chooser.currentDirectory
+        selectedFile = chooser.selectedFile
     }
 
     fun setSelectedFile(path: String) {
@@ -51,6 +52,4 @@ class ChooseFileButton(private val text: String) : JPanel() {
     }
 
     fun getFile() = selectedFile
-
-
 }

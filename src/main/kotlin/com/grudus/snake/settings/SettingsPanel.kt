@@ -8,25 +8,21 @@ import java.awt.Insets
 import javax.swing.JPanel
 
 class SettingsPanel(val window: Window): JPanel() {
-
     private val grid = GridBagConstraints()
-    private val boardSettings = BoardSettingsPanel(this, window.settings)
-
+    private val boardSettings = BoardSettingsPanel(window.settings)
     private val buttons = SubmitCancelButtons({save(); goToMenu()}, {goToMenu()}, "Save")
-
-    private fun goToMenu() = window.showMenuPanel()
-
-
-    private fun save() {
-        boardSettings.save(window.settings)
-        window.settings.save()
-    }
-
 
     init {
         layout = GridBagLayout()
 
         initView()
+    }
+
+    private fun goToMenu() = window.showMenuPanel()
+
+    private fun save() {
+        boardSettings.save(window.settings)
+        window.settings.save()
     }
 
     private fun initView() {
