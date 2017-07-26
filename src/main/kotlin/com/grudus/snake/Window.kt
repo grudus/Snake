@@ -6,6 +6,7 @@ import com.grudus.snake.game.Index
 import com.grudus.snake.game.board.Board
 import com.grudus.snake.game.board.generator.DefaultMapGenerator
 import com.grudus.snake.game.board.generator.SnMapGenerator
+import com.grudus.snake.highscores.HighScoresPanel
 import com.grudus.snake.menu.MenuPanel
 import com.grudus.snake.menu.MenuState
 import com.grudus.snake.settings.SettingsPanel
@@ -43,10 +44,10 @@ class Window(title: String, val width: Int = 800, val height: Int = 680, propert
 
     fun onStateChange(menuState: MenuState) {
         when (menuState) {
-            MenuState.EXIT -> closeWindow()
+            MenuState.EXIT -> frame.dispatchEvent(WindowEvent(frame, WindowEvent.WINDOW_CLOSING))
             MenuState.PLAY -> startGame()
-            MenuState.SETTINGS -> openSettings()
-            MenuState.HELP -> println("Halp!")
+            MenuState.SETTINGS -> frame.contentPane = SettingsPanel(this)
+            MenuState.HIGH_SCORES -> frame.contentPane = HighScoresPanel()
         }
         frame.validate()
         frame.repaint()
@@ -62,17 +63,11 @@ class Window(title: String, val width: Int = 800, val height: Int = 680, propert
     }
 
 
-    private fun openSettings() {
-        frame.contentPane = SettingsPanel(this)
-    }
-
     private fun startGame() {
         val panel = GamePanel(getBoard())
         frame.contentPane = panel
         panel.onInit()
     }
-
-    private fun closeWindow() = frame.dispatchEvent(WindowEvent(frame, WindowEvent.WINDOW_CLOSING))
 
     private fun registerFont() {
         val roboto = Font.createFont(Font.TRUETYPE_FONT, javaClass.classLoader.getResourceAsStream("font/Roboto-Regular.ttf"))

@@ -42,7 +42,7 @@ class MenuPanel(val window: Window) : JPanel(), KeyListener {
                         g.color = Colors.MENU_ITEM_NORMAL
                         roboto.deriveFont(Font.PLAIN)
                     }
-            GraphicsUtils.drawCenteredString(g, state.toString(), Rectangle(0, padding + height * index, width, height), font)
+            GraphicsUtils.drawCenteredString(g, state.label, Rectangle(0, padding + height * index, width, height), font)
         }
     }
 

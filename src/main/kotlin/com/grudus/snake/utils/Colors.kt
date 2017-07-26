@@ -11,4 +11,5 @@ object Colors {
     val ERROR: Color = Color.RED
     val MENU_ITEM_NORMAL = Color.decode("#242424")!!
     val MENU_ITEM_SELECTED = Color.decode("#ff533d")!!
+    val HIGH_SCORES = Color.decode("#D32F2F")!!
 }
