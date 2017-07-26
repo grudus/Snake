@@ -6,12 +6,12 @@ data class Position(var x: Int, var y: Int) {
 
     companion object {
         fun middleOf(index: Index, size: Dimension) = Position(
-                index.col * size.width + size.width / 2,
+                index.column * size.width + size.width / 2,
                 index.row * size.height + size.height / 2
         )
 
         fun startOf(index: Index, size: Dimension) = Position(
-                index.col * size.width,
+                index.column * size.width,
                 index.row * size.height
         )
     }

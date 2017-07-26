@@ -1,6 +1,10 @@
 package com.grudus.snake.game.entity.snake
 
-import com.grudus.snake.event.*
+import com.grudus.snake.event.EventBus
+import com.grudus.snake.event.game.ChangeSpeedEvent
+import com.grudus.snake.event.game.FoodEatenEvent
+import com.grudus.snake.event.game.GameEndEvent
+import com.grudus.snake.event.game.UpdateSnakeSizeEvent
 import com.grudus.snake.game.Index
 import com.grudus.snake.game.Speed
 import com.grudus.snake.game.board.Board
@@ -23,7 +27,7 @@ class Snake(private val startIndex: Index, startSpeed: Speed, private val initia
 
     fun updatePosition(board: Board, foods: Foods) {
         val headIndex = body[0].index
-        val newHeadIndex = Index(headIndex.row + direction.dy, headIndex.col + direction.dx)
+        val newHeadIndex = Index(headIndex.row + direction.dy, headIndex.column + direction.dx)
 
         if (board.couldBlock(newHeadIndex) || isBody(newHeadIndex)) {
             EventBus.publish(GameEndEvent())

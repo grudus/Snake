@@ -1,9 +1,9 @@
 package com.grudus.snake.game
 
 import com.grudus.snake.event.EventBus
-import com.grudus.snake.event.GameEventListener
-import com.grudus.snake.event.PauseEvent
-import com.grudus.snake.event.ResumeEvent
+import com.grudus.snake.event.game.GameEventListener
+import com.grudus.snake.event.game.PauseEvent
+import com.grudus.snake.event.game.ResumeEvent
 import com.grudus.snake.game.board.Board
 import com.grudus.snake.game.board.BoardPanel
 import com.grudus.snake.game.panel.ControlPanel

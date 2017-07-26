@@ -1,16 +1,18 @@
 package com.grudus.snake.settings
 
 import com.grudus.snake.Window
+import com.grudus.snake.event.EventBus
+import com.grudus.snake.event.settings.SaveSettingsEvent
 import com.grudus.snake.utils.component.SubmitCancelButtons
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import java.awt.Insets
 import javax.swing.JPanel
 
-class SettingsPanel(val window: Window): JPanel() {
+class SettingsPanel(val window: Window) : JPanel() {
     private val grid = GridBagConstraints()
     private val boardSettings = BoardSettingsPanel(window.settings)
-    private val buttons = SubmitCancelButtons({save(); goToMenu()}, {goToMenu()}, "Save")
+    private val buttons = SubmitCancelButtons({ if (save()) goToMenu() }, { goToMenu() }, "Save")
 
     init {
         layout = GridBagLayout()
@@ -20,9 +22,12 @@ class SettingsPanel(val window: Window): JPanel() {
 
     private fun goToMenu() = window.showMenuPanel()
 
-    private fun save() {
-        boardSettings.save(window.settings)
-        window.settings.save()
+    private fun save(): Boolean {
+        if (!boardSettings.isChangePossible()) return false
+
+        boardSettings.updateSettings()
+        EventBus.publish(SaveSettingsEvent(window.settings))
+        return true
     }
 
     private fun initView() {

@@ -5,6 +5,7 @@ import com.grudus.snake.utils.Colors
 import com.grudus.snake.utils.FontUtils
 import com.grudus.snake.utils.component.ChooseFileButton
 import com.grudus.snake.utils.component.NumericalTextField
+import com.grudus.snake.utils.isNullOrEmpty
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import java.awt.Insets
@@ -15,7 +16,7 @@ import javax.swing.JTextField
 import javax.swing.border.LineBorder
 import javax.swing.border.TitledBorder
 
-class BoardSettingsPanel(val settings: CurrentSettings) : JPanel() {
+class BoardSettingsPanel(val settings: Settings) : JPanel(), ChangingSettings {
     private val rowsLabel = JLabel("Rows: ")
     private val rows = NumericalTextField(3)
     private val columnsLabel = JLabel("Columns: ")
@@ -34,7 +35,13 @@ class BoardSettingsPanel(val settings: CurrentSettings) : JPanel() {
         updateDisabledComponents()
     }
 
-    fun save(settings: CurrentSettings) = currentState.save(settings, rows, columns, fileButton)
+    override fun isChangePossible(): Boolean {
+        return currentState.validate(rows, columns, fileButton)
+    }
+
+    override fun updateSettings() {
+        currentState.save(settings, rows, columns, fileButton)
+    }
 
     private fun createBorder() = TitledBorder(LineBorder(Colors.BORDER_COLOR),
                 "Board",
@@ -44,16 +51,20 @@ class BoardSettingsPanel(val settings: CurrentSettings) : JPanel() {
                 Colors.BORDER_TITLE_COLOR)
 
     private fun initState() {
-        if (this.settings.boardFilePath != null) {
+        if (!isNullOrEmpty(this.settings.boardFilePath)) {
             fileButton.setSelectedFile(this.settings.boardFilePath!!)
             fileCheckbox.isSelected = true
             currentState = State.CUSTOM_MAP
         }
+        else if (this.settings.boardSize != null) {
+            rows.text = this.settings.boardSize?.row.toString()
+            columns.text = this.settings.boardSize?.column.toString()
+        }
         updateDisabledComponents()
     }
 
-    private fun updateDisabledComponents() = currentState.updateDisabledComponents(rows, columns, fileButton)
 
+    private fun updateDisabledComponents() = currentState.updateDisabledComponents(rows, columns, fileButton)
 
     private fun initView() {
         layout = GridBagLayout()
@@ -111,7 +122,7 @@ class BoardSettingsPanel(val settings: CurrentSettings) : JPanel() {
 
     private enum class State {
         DEFAULT {
-            override fun save(settings: CurrentSettings, rows: JTextField, columns: JTextField, fileButton: ChooseFileButton) {
+            override fun save(settings: Settings, rows: JTextField, columns: JTextField, fileButton: ChooseFileButton) {
                 settings.boardFilePath = null
                 settings.boardSize = Index(rows.text.toInt(), columns.text.toInt())
             }
@@ -120,9 +131,13 @@ class BoardSettingsPanel(val settings: CurrentSettings) : JPanel() {
                 columns.isEditable = true
                 fileButton.isEnabled = false
             }
+
+            override fun validate(rows: NumericalTextField, columns: NumericalTextField, fileButton: ChooseFileButton) =
+                    listOf(columns, rows).filter { it.text.isBlank() }.onEach { it.showError() }.isEmpty()
+
         },
         CUSTOM_MAP {
-            override fun save(settings: CurrentSettings, rows: JTextField, columns: JTextField, fileButton: ChooseFileButton) {
+            override fun save(settings: Settings, rows: JTextField, columns: JTextField, fileButton: ChooseFileButton) {
                 settings.boardFilePath = fileButton.getFile()?.absolutePath
                 settings.boardSize = null
             }
@@ -131,8 +146,11 @@ class BoardSettingsPanel(val settings: CurrentSettings) : JPanel() {
                 columns.isEditable = false
                 fileButton.isEnabled = true
             }
+            override fun validate(rows: NumericalTextField, columns: NumericalTextField, fileButton: ChooseFileButton) =
+                    fileButton.getFile() != null && fileButton.getFile()!!.exists()
         };
-        abstract fun save(settings: CurrentSettings, rows: JTextField, columns: JTextField, fileButton: ChooseFileButton)
+        abstract fun save(settings: Settings, rows: JTextField, columns: JTextField, fileButton: ChooseFileButton)
         abstract fun updateDisabledComponents(rows: JTextField, columns: JTextField, fileButton: ChooseFileButton)
+        abstract fun  validate(rows: NumericalTextField, columns: NumericalTextField, fileButton: ChooseFileButton): Boolean
     }
 }

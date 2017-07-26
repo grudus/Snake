@@ -1,7 +1,7 @@
 package com.grudus.snake.game.board
 
 import com.grudus.snake.event.EventBus
-import com.grudus.snake.event.NewGameEvent
+import com.grudus.snake.event.game.NewGameEvent
 import com.grudus.snake.game.Index
 import com.grudus.snake.game.LifeCycle
 import com.grudus.snake.game.Speed

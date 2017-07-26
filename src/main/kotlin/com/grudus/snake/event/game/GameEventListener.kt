@@ -1,12 +1,12 @@
-package com.grudus.snake.event
+package com.grudus.snake.event.game
 
+import com.grudus.snake.event.EventBus
+import com.grudus.snake.event.EventListener
 import com.grudus.snake.game.GamePanel
-import org.slf4j.LoggerFactory
 
-class GameEventListener(private val gamePanel: GamePanel) {
-    private val log = LoggerFactory.getLogger(javaClass)
+class GameEventListener(private val gamePanel: GamePanel): EventListener() {
 
-    fun startListening() {
+    override fun startListening() {
         EventBus.listen(NewGameEvent::class.java).subscribe {
             log.debug("Request for new game")
             gamePanel.onInit()

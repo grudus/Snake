@@ -27,9 +27,11 @@ class NumericalTextField(doc: Document?, text: String?, columns: Int) : JTextFie
         }
     }
 
-    private fun showErrorBorder() {
+    fun showError() = showErrorBorder(1000)
+
+    private fun showErrorBorder(delay: Int = 100) {
         border = errorBorder
-        Timer(100) {
+        Timer(delay) {
             border = normalBorder
         }.runOnce()
     }

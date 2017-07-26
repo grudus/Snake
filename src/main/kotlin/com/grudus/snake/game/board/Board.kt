@@ -20,6 +20,6 @@ class Board(private var board: Array<Array<Field>>) {
     }
 
     fun couldBlock(index: Index): Boolean {
-        return board[index.row][index.col].isBlocking
+        return board[index.row][index.column].isBlocking
     }
 }

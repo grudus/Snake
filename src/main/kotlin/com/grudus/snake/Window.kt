@@ -1,5 +1,6 @@
 package com.grudus.snake
 
+import com.grudus.snake.event.settings.SettingsEventListener
 import com.grudus.snake.game.GamePanel
 import com.grudus.snake.game.Index
 import com.grudus.snake.game.board.Board
@@ -7,8 +8,8 @@ import com.grudus.snake.game.board.generator.DefaultMapGenerator
 import com.grudus.snake.game.board.generator.SnMapGenerator
 import com.grudus.snake.menu.MenuPanel
 import com.grudus.snake.menu.MenuState
-import com.grudus.snake.settings.CurrentSettings
 import com.grudus.snake.settings.SettingsPanel
+import com.grudus.snake.settings.SettingsReader
 import java.awt.Dimension
 import java.awt.Font
 import java.awt.GraphicsEnvironment
@@ -19,12 +20,13 @@ import javax.swing.JFrame
 import javax.swing.JFrame.EXIT_ON_CLOSE
 import javax.swing.UIManager
 
-class Window(title: String, val width: Int = 800, val height: Int = 680) {
-    val settings = CurrentSettings(this.javaClass.classLoader.getResource("application.properties").path)
+class Window(title: String, val width: Int = 800, val height: Int = 680, propertiesPath: String = "settings.json") {
+    val settings = SettingsReader(propertiesPath).read()
     private val frame = JFrame(title)
 
     init {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
+        SettingsEventListener(propertiesPath).startListening()
         registerFont()
         initFrameSize()
         frame.defaultCloseOperation = EXIT_ON_CLOSE

@@ -1,4 +1,4 @@
-package com.grudus.snake.event
+package com.grudus.snake.event.game
 
 import com.grudus.snake.game.Speed
 import com.grudus.snake.game.entity.food.Food
