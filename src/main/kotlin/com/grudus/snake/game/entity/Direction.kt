@@ -1,15 +1,15 @@
 package com.grudus.snake.game.entity
 
 
-//Because position is calculated from top left corner, so when snake goes down it increases it's 'y' position
-enum class Direction(val dx: Int, val dy: Int, val degrees: Double, val canChangeDirection: (Direction) -> Boolean) {
-    UP(0, -1, 0.0, { newDirection -> newDirection != DOWN }),
-    DOWN(0, 1, 180.0, { newDirection -> newDirection != UP }),
-    LEFT(-1, 0, 270.0, { newDirection -> newDirection != RIGHT }),
-    RIGHT(1, 0, 90.0, { newDirection -> newDirection != LEFT })
+//Because position is calculated from top left corner, when snake goes down, it increases its 'y' position
+enum class Direction(val dx: Int, val dy: Int, val degrees: Double) {
+    UP(0, -1, 0.0),
+    RIGHT(1, 0, 90.0),
+    DOWN(0, 1, 180.0),
+    LEFT(-1, 0, 270.0),
     ;
 
-    companion object {
-        fun findByDegrees(degrees: Double) = values().find { it.degrees == degrees }
-    }
+    val canChangeDirection: (Direction) -> Boolean = { it.successor.successor != this }
+
+    val successor: Direction by lazy { values()[(ordinal + 1) % values().size] }
 }
