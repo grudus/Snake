@@ -2,6 +2,7 @@ package com.grudus.snake
 
 import com.grudus.snake.event.highscores.HighScoresListener
 import com.grudus.snake.event.settings.SettingsEventListener
+import com.grudus.snake.event.window.WindowEventListener
 import com.grudus.snake.game.GamePanel
 import com.grudus.snake.game.Index
 import com.grudus.snake.game.board.Board
@@ -33,10 +34,11 @@ class Window(title: String, val width: Int = 800, val height: Int = 680, propert
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
         SettingsEventListener(propertiesPath).startListening()
         HighScoresListener(highScores, highScoresPath).startListening()
+        WindowEventListener(this).startListening()
         registerFont()
         initFrameSize()
         frame.defaultCloseOperation = EXIT_ON_CLOSE
-        frame.contentPane = MenuPanel(this)
+        showMenuPanel()
     }
 
     fun show() {
@@ -50,29 +52,23 @@ class Window(title: String, val width: Int = 800, val height: Int = 680, propert
     fun onStateChange(menuState: MenuState) {
         when (menuState) {
             MenuState.EXIT -> frame.dispatchEvent(WindowEvent(frame, WindowEvent.WINDOW_CLOSING))
-            MenuState.PLAY -> startGame()
-            MenuState.SETTINGS -> frame.contentPane = SettingsPanel(this)
-            MenuState.HIGH_SCORES -> frame.contentPane = HighScoresPanel(highScores)
+            MenuState.PLAY -> startPanel(GamePanel(getBoard(), highScores))
+            MenuState.SETTINGS -> startPanel(SettingsPanel(settings))
+            MenuState.HIGH_SCORES -> startPanel(HighScoresPanel(highScores))
         }
-        frame.validate()
-        frame.repaint()
     }
 
-    fun showMenuPanel() {
-        val panel = MenuPanel(this)
-        frame.contentPane = panel
-        panel.isFocusable = true
-        panel.requestFocus()
-        frame.validate()
-        frame.repaint()
-    }
-
-
-    private fun startGame() {
-        val panel = GamePanel(getBoard(), highScores)
+    private fun startPanel(panel: LifeCyclePanel) {
         frame.contentPane = panel
         panel.onInit()
+        frame.validate()
+        frame.repaint()
     }
+
+    fun showMenuPanel(currentState: MenuState = MenuState.PLAY) {
+        startPanel(MenuPanel(this, currentState))
+    }
+
 
     private fun registerFont() {
         val roboto = Font.createFont(Font.TRUETYPE_FONT, javaClass.classLoader.getResourceAsStream("font/Roboto-Regular.ttf"))

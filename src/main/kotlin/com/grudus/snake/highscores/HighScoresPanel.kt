@@ -1,20 +1,31 @@
 package com.grudus.snake.highscores
 
+import com.grudus.snake.LifeCyclePanel
+import com.grudus.snake.event.EventBus.publish
+import com.grudus.snake.event.window.ShowMenuEvent
+import com.grudus.snake.menu.MenuState
 import com.grudus.snake.utils.Colors
 import com.grudus.snake.utils.FontUtils
 import com.grudus.snake.utils.GraphicsUtils
 import java.awt.Font
 import java.awt.Graphics
 import java.awt.Rectangle
-import javax.swing.JPanel
+import java.awt.event.KeyEvent
+import java.awt.event.KeyListener
 
-class HighScoresPanel(val highScores: HighScores) : JPanel() {
-
+class HighScoresPanel(val highScores: HighScores) : LifeCyclePanel(), KeyListener {
     init {
         font = FontUtils.monospace(20, Font.BOLD)
+        addKeyListener(this)
+    }
+
+    override fun onInit() {
+        requestFocus()
+        isFocusable = true
     }
 
     override fun paintComponent(g: Graphics?) {
+        requestFocus()
         val sorted = highScores.scores.sortedByDescending { it.points }
         g!!.font = font
         g.color = Colors.HIGH_SCORES
@@ -25,7 +36,16 @@ class HighScoresPanel(val highScores: HighScores) : JPanel() {
         }
     }
 
+    override fun keyPressed(e: KeyEvent?) {
+        if (e?.keyCode == KeyEvent.VK_ESCAPE) {
+            publish(ShowMenuEvent(MenuState.HIGH_SCORES))
+        }}
+
     private fun createHighScoreItem(position: Int, score: Score): String =
             "%-4s%-25s%-5s".format("$position.", score.name, score.points)
+
+
+    override fun keyTyped(e: KeyEvent?) {}
+    override fun keyReleased(e: KeyEvent?) {}
 
 }

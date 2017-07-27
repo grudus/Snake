@@ -1,7 +1,7 @@
 package com.grudus.snake.game.panel
 
+import com.grudus.snake.LifeCyclePanel
 import com.grudus.snake.game.GamePanel
-import com.grudus.snake.game.LifeCycle
 import com.grudus.snake.game.Speed
 import com.grudus.snake.utils.Colors
 import com.grudus.snake.utils.FontUtils
@@ -11,10 +11,9 @@ import java.awt.GridBagConstraints.LINE_END
 import java.awt.GridBagConstraints.LINE_START
 import java.awt.GridBagLayout
 import javax.swing.JLabel
-import javax.swing.JPanel
 import javax.swing.Timer
 
-class ControlPanel(private val gamePanel: GamePanel, val startSpeed: Speed, val initialSize: Int) : JPanel(), LifeCycle {
+class ControlPanel(private val gamePanel: GamePanel, val startSpeed: Speed, val initialSize: Int) : LifeCyclePanel() {
     private val points = JLabel()
     private val pointsLabel = JLabel("Points: ")
     private val time = JLabel()

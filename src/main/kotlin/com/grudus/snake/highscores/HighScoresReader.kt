@@ -11,8 +11,8 @@ class HighScoresReader(path: String) {
     private val file = File(this.javaClass.classLoader.getResource(path).path)
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun read(): List<Score> {
+    fun read(): MutableList<Score> {
         log.info("Reading high scores from file ${file.absolutePath}")
-        return mapper.readValue<List<Score>>(file)
+        return mapper.readValue<MutableList<Score>>(file)
     }
 }

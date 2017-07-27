@@ -1,4 +1,4 @@
-package com.grudus.snake.game
+package com.grudus.snake
 
 interface LifeCycle {
     fun onInit()

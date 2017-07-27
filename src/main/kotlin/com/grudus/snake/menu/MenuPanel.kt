@@ -1,6 +1,7 @@
 package com.grudus.snake.menu
 
 
+import com.grudus.snake.LifeCyclePanel
 import com.grudus.snake.Window
 import com.grudus.snake.utils.Colors
 import com.grudus.snake.utils.FontUtils
@@ -11,21 +12,23 @@ import java.awt.Rectangle
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.awt.font.TextAttribute
-import javax.swing.JPanel
 
 
-class MenuPanel(val window: Window) : JPanel(), KeyListener {
+class MenuPanel(val window: Window, initialState: MenuState) : LifeCyclePanel(), KeyListener {
     private val roboto = FontUtils.roboto(24)
     private val backgroundColor = Colors.MENU_BACKGROUND
 
-    private var currentState = 0
+    private var currentState = MenuState.values().indexOf(initialState)
 
     init {
         background = backgroundColor
         roboto.deriveFont(mapOf(Pair(TextAttribute.WEIGHT, TextAttribute.WEIGHT_EXTRA_LIGHT)))
+        addKeyListener(this)
+    }
+
+    override fun onInit() {
         isFocusable = true
         requestFocus()
-        addKeyListener(this)
     }
 
 

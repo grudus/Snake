@@ -1,9 +1,7 @@
 package com.grudus.snake.game.board
 
-import com.grudus.snake.event.EventBus
-import com.grudus.snake.event.game.NewGameEvent
+import com.grudus.snake.LifeCyclePanel
 import com.grudus.snake.game.Index
-import com.grudus.snake.game.LifeCycle
 import com.grudus.snake.game.Speed
 import com.grudus.snake.game.entity.Direction
 import com.grudus.snake.game.entity.food.Foods
@@ -17,12 +15,11 @@ import java.awt.Graphics
 import java.awt.event.KeyEvent
 import java.awt.event.KeyEvent.*
 import java.util.*
-import javax.swing.JPanel
 import javax.swing.Timer
 import kotlin.properties.Delegates
 
 
-class BoardPanel(private val board: Board, private val tileDimension: Dimension, private val initialSnakeSize: Int) : JPanel(), LifeCycle {
+class BoardPanel(private val board: Board, private val tileDimension: Dimension, private val initialSnakeSize: Int) : LifeCyclePanel() {
     private val initialSnakeSpeed = Speed.MEDIUM
     private val transparentBackground = Colors.TRANSPARENT_BLACK
     private val foods = Foods()
@@ -78,7 +75,6 @@ class BoardPanel(private val board: Board, private val tileDimension: Dimension,
             VK_LEFT, VK_A -> addMovement(Direction.LEFT)
             VK_RIGHT, VK_D -> addMovement(Direction.RIGHT)
             VK_SPACE -> timer.delay = Speed.EXTRA_FAST.delayTime
-            VK_ENTER -> if (isGameEnded) EventBus.publish(NewGameEvent())
         }
     }
 
@@ -111,7 +107,7 @@ class BoardPanel(private val board: Board, private val tileDimension: Dimension,
     private fun drawEndGame(g: Graphics) {
         fillBackground(g, transparentBackground)
         g.color = Color.RED
-        GraphicsUtils.drawCenteredString(g, "GAME OVER", visibleRect, FontUtils.roboto(32))
+        GraphicsUtils.drawCenteredString(g, "GAME OVER\nENTER to continue, ESC to go back", visibleRect, FontUtils.roboto(32))
     }
 
     private fun fillBackground(graphics: Graphics, color: Color) {
