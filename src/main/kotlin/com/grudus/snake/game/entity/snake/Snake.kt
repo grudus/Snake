@@ -37,7 +37,7 @@ class Snake(private val startIndex: Index, startSpeed: Speed, private val initia
         if (foods.containsFood(newHeadIndex)) {
             EventBus.publish(FoodEatenEvent(foods[newHeadIndex]!!))
             foods.interact(newHeadIndex, this)
-            foods.newFoodAtRandom(board, this)
+            foods.newFoodAtRandom(board, this, newHeadIndex)
             EventBus.publish(UpdateSnakeSizeEvent(bodyLength()))
         }
 

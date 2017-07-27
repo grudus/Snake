@@ -34,14 +34,14 @@ class Foods {
     fun drawAll(g: Graphics, tileSize: Dimension, imageObserver: ImageObserver) =
             indexToFood.forEach { index, food -> food.draw(g, tileSize, index, imageObserver) }
 
-    fun newFoodAtRandom(board: Board, snake: Snake): Food? {
+    fun newFoodAtRandom(board: Board, snake: Snake, vararg disabledIndexes: Index): Food? {
         var index: Index?
         do {
             val col = random.nextInt(board.columns)
             val row = random.nextInt(board.rows)
             index = Index(row, col)
 
-        } while (!board.isAccessible(row, col) || snake.isBody(index!!))
+        } while (!board.isAccessible(row, col) || snake.isBody(index!!) || disabledIndexes.contains(index))
 
         return newFood(index)
     }

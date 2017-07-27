@@ -74,7 +74,7 @@ class BoardPanel(private val board: Board, private val tileDimension: Dimension,
             VK_DOWN, VK_S -> addMovement(Direction.DOWN)
             VK_LEFT, VK_A -> addMovement(Direction.LEFT)
             VK_RIGHT, VK_D -> addMovement(Direction.RIGHT)
-            VK_SPACE -> timer.delay = Speed.EXTRA_FAST.delayTime
+            VK_SPACE -> timer.delay = Speed.FAST.delayTime
         }
     }
 
