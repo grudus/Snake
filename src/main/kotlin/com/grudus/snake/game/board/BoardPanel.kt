@@ -27,7 +27,7 @@ class BoardPanel(private val board: Board, private val tileDimension: Dimension,
     private val transparentBackground = Colors.TRANSPARENT_BLACK
     private val foods = Foods()
     private val movementQueue = LinkedList<Direction>()
-    
+
     private val timer = Timer(initialSnakeSpeed.delayTime, { updateView() })
 
     private var snake: Snake by Delegates.notNull<Snake>()
@@ -62,14 +62,12 @@ class BoardPanel(private val board: Board, private val tileDimension: Dimension,
     }
 
     override fun paintComponent(g: Graphics?) {
+        fillBackground(g!!, background)
+        board.draw(g, tileDimension, this)
+        snake.draw(g, tileDimension, this)
+        foods.drawAll(g, tileDimension, this)
         if (isGameEnded)
-            drawEndGame(g!!)
-        else {
-            fillBackground(g!!, background)
-            board.draw(g, tileDimension, this)
-            snake.draw(g, tileDimension, this)
-            foods.drawAll(g, tileDimension, this)
-        }
+            drawEndGame(g)
     }
 
 
@@ -104,7 +102,7 @@ class BoardPanel(private val board: Board, private val tileDimension: Dimension,
         this.tileDimension.width = width / board.columns
         this.tileDimension.height = height / board.rows
     }
-    
+
     private fun addMovement(direction: Direction) {
         if (movementQueue.size < 3)
             movementQueue.add(direction)

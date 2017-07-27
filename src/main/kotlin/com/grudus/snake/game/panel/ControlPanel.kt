@@ -59,6 +59,8 @@ class ControlPanel(private val gamePanel: GamePanel, val startSpeed: Speed, val 
         timer.stop()
     }
 
+    fun getPoints() = points.text.toInt()
+
     fun updateSpeed(speed: Speed) {
         this.speed.text = speed.label
     }

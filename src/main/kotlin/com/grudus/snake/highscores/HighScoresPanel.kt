@@ -8,15 +8,14 @@ import java.awt.Graphics
 import java.awt.Rectangle
 import javax.swing.JPanel
 
-class HighScoresPanel : JPanel() {
-    val scores = HighScoresReader("high_scores.json").read()
+class HighScoresPanel(val highScores: HighScores) : JPanel() {
 
     init {
         font = FontUtils.monospace(20, Font.BOLD)
     }
 
     override fun paintComponent(g: Graphics?) {
-        val sorted = scores.sortedByDescending { it.points }
+        val sorted = highScores.scores.sortedByDescending { it.points }
         g!!.font = font
         g.color = Colors.HIGH_SCORES
         val padding: Int = (height * 0.15).toInt()

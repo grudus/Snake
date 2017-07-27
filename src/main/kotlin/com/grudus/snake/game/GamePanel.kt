@@ -7,6 +7,8 @@ import com.grudus.snake.event.game.ResumeEvent
 import com.grudus.snake.game.board.Board
 import com.grudus.snake.game.board.BoardPanel
 import com.grudus.snake.game.panel.ControlPanel
+import com.grudus.snake.highscores.HighScores
+import com.grudus.snake.highscores.dialog.NewHighScoreDialog
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.event.ComponentEvent
@@ -16,7 +18,7 @@ import java.awt.event.KeyListener
 import javax.swing.JPanel
 import kotlin.properties.Delegates
 
-class GamePanel(board: Board) : JPanel(), KeyListener, ComponentListener, LifeCycle {
+class GamePanel(board: Board, val highScores: HighScores) : JPanel(), KeyListener, ComponentListener, LifeCycle {
     private val initialSnakeSize = 5
 
     private val controlPanel = ControlPanel(this, Speed.MEDIUM, initialSnakeSize)
@@ -53,8 +55,11 @@ class GamePanel(board: Board) : JPanel(), KeyListener, ComponentListener, LifeCy
     }
 
     override fun onEnd() {
-        controlPanel.onEnd()
         boardPanel.onEnd()
+        if (highScores.isScoreBeaten(controlPanel.getPoints())) {
+            NewHighScoreDialog(controlPanel.getPoints()).showDialog()
+        }
+        controlPanel.onEnd()
     }
 
     override fun keyPressed(e: KeyEvent?) {

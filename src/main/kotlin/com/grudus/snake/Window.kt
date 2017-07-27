@@ -1,12 +1,15 @@
 package com.grudus.snake
 
+import com.grudus.snake.event.highscores.HighScoresListener
 import com.grudus.snake.event.settings.SettingsEventListener
 import com.grudus.snake.game.GamePanel
 import com.grudus.snake.game.Index
 import com.grudus.snake.game.board.Board
 import com.grudus.snake.game.board.generator.DefaultMapGenerator
 import com.grudus.snake.game.board.generator.SnMapGenerator
+import com.grudus.snake.highscores.HighScores
 import com.grudus.snake.highscores.HighScoresPanel
+import com.grudus.snake.highscores.HighScoresReader
 import com.grudus.snake.menu.MenuPanel
 import com.grudus.snake.menu.MenuState
 import com.grudus.snake.settings.SettingsPanel
@@ -21,13 +24,15 @@ import javax.swing.JFrame
 import javax.swing.JFrame.EXIT_ON_CLOSE
 import javax.swing.UIManager
 
-class Window(title: String, val width: Int = 800, val height: Int = 680, propertiesPath: String = "settings.json") {
+class Window(title: String, val width: Int = 800, val height: Int = 680, propertiesPath: String = "settings.json", highScoresPath: String = "high_scores.json") {
     val settings = SettingsReader(propertiesPath).read()
+    val highScores = HighScores(HighScoresReader(highScoresPath).read())
     private val frame = JFrame(title)
 
     init {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
         SettingsEventListener(propertiesPath).startListening()
+        HighScoresListener(highScores, highScoresPath).startListening()
         registerFont()
         initFrameSize()
         frame.defaultCloseOperation = EXIT_ON_CLOSE
@@ -47,7 +52,7 @@ class Window(title: String, val width: Int = 800, val height: Int = 680, propert
             MenuState.EXIT -> frame.dispatchEvent(WindowEvent(frame, WindowEvent.WINDOW_CLOSING))
             MenuState.PLAY -> startGame()
             MenuState.SETTINGS -> frame.contentPane = SettingsPanel(this)
-            MenuState.HIGH_SCORES -> frame.contentPane = HighScoresPanel()
+            MenuState.HIGH_SCORES -> frame.contentPane = HighScoresPanel(highScores)
         }
         frame.validate()
         frame.repaint()
@@ -64,7 +69,7 @@ class Window(title: String, val width: Int = 800, val height: Int = 680, propert
 
 
     private fun startGame() {
-        val panel = GamePanel(getBoard())
+        val panel = GamePanel(getBoard(), highScores)
         frame.contentPane = panel
         panel.onInit()
     }
