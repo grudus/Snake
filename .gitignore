@@ -4,4 +4,4 @@ out
 *.ipr
 *.iws
 .gradle
-lib
+build

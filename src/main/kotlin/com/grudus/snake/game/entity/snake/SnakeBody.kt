@@ -24,7 +24,7 @@ class SnakeBody(index: Index, direction: Direction) : SnakeTile(index, direction
 
     private fun findCornerImageDirection() =
             if (isTurningLeft()) direction
-            else Direction.findByDegrees((direction.degrees + 90) % 360)!!
+            else direction.successor
 
 
     private fun isTurningLeft() = isGoingFromUpToLeft()
