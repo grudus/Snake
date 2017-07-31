@@ -14,7 +14,7 @@ import java.awt.Component
 import java.awt.Dimension
 import java.awt.Graphics
 
-class Snake(private val startIndex: Index, startSpeed: Speed, private val initialLength: Int) {
+class Snake(startIndex: Index, startSpeed: Speed, initialLength: Int) {
     var currentSpeed = startSpeed
     var direction = Direction.RIGHT
         set(value) {
@@ -22,10 +22,10 @@ class Snake(private val startIndex: Index, startSpeed: Speed, private val initia
                 field = value
         }
 
-    private val body: MutableList<SnakeTile> = createBody()
-
+    private val body = SnakeBody(initialLength, startIndex)
 
     fun updatePosition(board: Board, foods: Foods) {
+        body.head.direction = direction
         val newHeadIndex = calculateNewHeadIndex(board)
 
         if (board.couldBlock(newHeadIndex) || isBody(newHeadIndex)) {
@@ -37,22 +37,24 @@ class Snake(private val startIndex: Index, startSpeed: Speed, private val initia
             onFoodEaten(foods, board, newHeadIndex)
         }
 
-        body[0].direction = direction
-        for (i in body.size - 1 downTo 1) {
-            body[i].changePosition(body[i - 1].index, body[i - 1].direction)
-            body[i - 1].previousTileDirection = body[i].direction
-        }
-        body[0].changePosition(newHeadIndex, direction)
+        for (i in body.size - 1 downTo 1)
+            body.changePositionToPrevious(i)
+
+        body.head.changePosition(newHeadIndex, direction)
     }
 
-    fun draw(g: Graphics, size: Dimension, component: Component) = body.forEach { it.draw(g, size, component) }
+    fun draw(g: Graphics, size: Dimension, component: Component) = body.draw(g, size, component)
 
-
-    fun increaseBody() = body.add(body.size - 1, SnakeBody(Index(body.last().index), body.last().direction))
+    fun increaseBody() {
+        body.duplicateLast()
+        EventBus.publish(UpdateSnakeSizeEvent(body.size))
+    }
 
     fun decreaseBody() {
-        if (bodyLength() > 3)
-            body.removeAt(body.size - 2)
+        if (body.size > 3) {
+            body.removeLast()
+            EventBus.publish(UpdateSnakeSizeEvent(body.size))
+        }
     }
 
     fun increaseSpeed() {
@@ -65,31 +67,16 @@ class Snake(private val startIndex: Index, startSpeed: Speed, private val initia
         EventBus.publish(ChangeSpeedEvent(currentSpeed))
     }
 
-    fun isBody(index: Index) = body.any { body ->
-        body.index == index
-    }
-
-    fun bodyLength() = body.size
-
-    private fun createBody(): MutableList<SnakeTile> {
-        val body: MutableList<SnakeTile> = mutableListOf()
-        body.add(SnakeHead(startIndex, Direction.RIGHT))
-
-        return (1..initialLength).mapTo(body) {
-            if (it == initialLength) SnakeTail(startIndex - Index(0, it), Direction.RIGHT)
-            else SnakeBody(startIndex - Index(0, it), Direction.RIGHT)
-        }
-    }
+    fun isBody(index: Index) = body.contains(index)
 
     private fun onFoodEaten(foods: Foods, board: Board, newHeadIndex: Index) {
         EventBus.publish(FoodEatenEvent(foods[newHeadIndex]!!))
         foods.interact(newHeadIndex, this)
         foods.newFoodAtRandom(board, this, newHeadIndex)
-        EventBus.publish(UpdateSnakeSizeEvent(bodyLength()))
     }
 
     private fun calculateNewHeadIndex(board: Board): Index {
-        val current = body[0].index
+        val current = body.head.index
         val lastRow = board.rows - 1
         val lastColumn = board.columns - 1
         val newRow = if (leavesBoardFromTopSide(current)) lastRow else (current.row + direction.dy) % board.rows

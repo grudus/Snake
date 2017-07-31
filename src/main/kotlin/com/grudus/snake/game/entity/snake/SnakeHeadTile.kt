@@ -8,7 +8,7 @@ import java.awt.Component
 import java.awt.Dimension
 import java.awt.Graphics
 
-class SnakeHead(index: Index, direction: Direction) : SnakeTile(index, direction, ImageUtils.SNAKE_HEAD) {
+class SnakeHeadTile(index: Index, direction: Direction) : SnakeTile(index, direction, ImageUtils.SNAKE_HEAD) {
 
     override fun draw(g: Graphics, size: Dimension, component: Component) {
         val position = Position.startOf(index, size)
