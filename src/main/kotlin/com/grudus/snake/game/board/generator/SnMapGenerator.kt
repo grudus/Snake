@@ -13,8 +13,8 @@ class SnMapGenerator : MapGenerator<File> {
                         when (number) {"1" -> Field.BLOCK
                             else -> Field.EMPTY
                         }
-                    }.toTypedArray()
-                }.toTypedArray()
+                    }
+                }
         return Board(board)
     }
 }

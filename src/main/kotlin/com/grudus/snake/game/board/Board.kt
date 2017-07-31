@@ -6,7 +6,7 @@ import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.image.ImageObserver
 
-class Board(private var board: Array<Array<Field>>) {
+class Board(private var board: List<List<Field>>) {
     val rows = board.size
     val columns = board[0].size
 
