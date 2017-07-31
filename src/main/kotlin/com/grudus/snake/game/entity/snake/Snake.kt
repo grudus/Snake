@@ -26,8 +26,7 @@ class Snake(private val startIndex: Index, startSpeed: Speed, private val initia
 
 
     fun updatePosition(board: Board, foods: Foods) {
-        val headIndex = body[0].index
-        val newHeadIndex = Index(headIndex.row + direction.dy, headIndex.column + direction.dx)
+        val newHeadIndex = calculateNewHeadIndex(board)
 
         if (board.couldBlock(newHeadIndex) || isBody(newHeadIndex)) {
             EventBus.publish(GameEndEvent())
@@ -35,10 +34,7 @@ class Snake(private val startIndex: Index, startSpeed: Speed, private val initia
         }
 
         if (foods.containsFood(newHeadIndex)) {
-            EventBus.publish(FoodEatenEvent(foods[newHeadIndex]!!))
-            foods.interact(newHeadIndex, this)
-            foods.newFoodAtRandom(board, this, newHeadIndex)
-            EventBus.publish(UpdateSnakeSizeEvent(bodyLength()))
+            onFoodEaten(foods, board, newHeadIndex)
         }
 
         body[0].direction = direction
@@ -49,8 +45,8 @@ class Snake(private val startIndex: Index, startSpeed: Speed, private val initia
         body[0].changePosition(newHeadIndex, direction)
     }
 
-
     fun draw(g: Graphics, size: Dimension, component: Component) = body.forEach { it.draw(g, size, component) }
+
 
     fun increaseBody() = body.add(body.size - 1, SnakeBody(Index(body.last().index), body.last().direction))
 
@@ -63,6 +59,7 @@ class Snake(private val startIndex: Index, startSpeed: Speed, private val initia
         currentSpeed = currentSpeed.nextSpeed()
         EventBus.publish(ChangeSpeedEvent(currentSpeed))
     }
+
     fun decreaseSpeed() {
         currentSpeed = currentSpeed.previousSpeed()
         EventBus.publish(ChangeSpeedEvent(currentSpeed))
@@ -83,4 +80,23 @@ class Snake(private val startIndex: Index, startSpeed: Speed, private val initia
             else SnakeBody(startIndex - Index(0, it), Direction.RIGHT)
         }
     }
+
+    private fun onFoodEaten(foods: Foods, board: Board, newHeadIndex: Index) {
+        EventBus.publish(FoodEatenEvent(foods[newHeadIndex]!!))
+        foods.interact(newHeadIndex, this)
+        foods.newFoodAtRandom(board, this, newHeadIndex)
+        EventBus.publish(UpdateSnakeSizeEvent(bodyLength()))
+    }
+
+    private fun calculateNewHeadIndex(board: Board): Index {
+        val current = body[0].index
+        val lastRow = board.rows - 1
+        val lastColumn = board.columns - 1
+        val newRow = if (leavesBoardFromTopSide(current)) lastRow else (current.row + direction.dy) % board.rows
+        val newColumn = if (leavesBoardFromLeftSide(current)) lastColumn else (current.column + direction.dx) % board.columns
+        return Index(newRow, newColumn)
+    }
+
+    private fun leavesBoardFromLeftSide(headIndex: Index) = headIndex.column + direction.dx < 0
+    private fun leavesBoardFromTopSide(headIndex: Index) = headIndex.row + direction.dy < 0
 }

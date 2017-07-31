@@ -37,7 +37,7 @@ class BoardPanel(private val board: Board, private val tileDimension: Dimension,
 
     override fun onInit() {
         isFocusable = true
-        snake = Snake(Index(5, 5), initialSnakeSpeed, initialSnakeSize)
+        snake = Snake(Index(7, 7), initialSnakeSpeed, initialSnakeSize)
         updateSnakeSpeed()
         foods.newFoodAtRandom(board, snake)
         timer.restart()
