@@ -1,6 +1,7 @@
 # Snake
 
 Simple snake game written in **Kotlin**.
+Why you should choose it instead of another Snake game? I don't see any reason. Or maybe one fun thing - you can create your own maps. 
 
 ## How it looks?
 
@@ -21,9 +22,28 @@ If you want to play in this super original and innovative game you can download 
 
 Or if you want to contribute it itself 
 
-````
+````bash
 git clone https://github.com/grudus/Snake.git
-
-
-
+cd Snake
+gradle build
+gradle fatJar
+cp -r ./config ./build/libs/config 
+cd ./build/libs
+java -jar Snake-all-{version}.jar
 ````
+
+**Remember** that *config* file must be in the same directory as actual game!
+
+<br/>
+
+## How to play?
+
+**UP/W DOWN/S RIGHT/D LEFT/A** to move Snake.
+
+**Space** to temporarily change speed to `FAST`
+
+**ESC** to pause
+
+<br/><br/>
+
+Feel free to contribute.
