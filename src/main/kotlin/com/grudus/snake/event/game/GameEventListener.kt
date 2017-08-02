@@ -24,7 +24,7 @@ class GameEventListener(private val gamePanel: GamePanel): EventListener() {
 
 
         EventBus.listen(GameEndEvent::class.java).subscribe {
-            log.debug("Game over :(")
+            log.debug("Game over :( Reason: [${it.reason}]")
             gamePanel.onEnd()
         }
 

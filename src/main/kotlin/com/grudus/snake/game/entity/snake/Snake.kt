@@ -28,7 +28,7 @@ class Snake(startIndex: Index, startSpeed: Speed, initialLength: Int) {
         val newHeadIndex = calculateNewHeadIndex(board)
 
         if (board.couldBlock(newHeadIndex) || isBody(newHeadIndex)) {
-            EventBus.publish(GameEndEvent())
+            EventBus.publish(GameEndEvent("Blocked by board or body"))
             return
         }
 

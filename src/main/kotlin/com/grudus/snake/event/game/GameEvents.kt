@@ -6,7 +6,7 @@ import com.grudus.snake.game.entity.food.Food
 class NewGameEvent
 class PauseEvent
 class ResumeEvent
-class GameEndEvent
+class GameEndEvent(val reason: String)
 class FoodEatenEvent(val food: Food)
 class ChangeSpeedEvent(val currentSpeed: Speed)
 class UpdateSnakeSizeEvent(val currentSize: Int)

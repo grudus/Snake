@@ -28,6 +28,16 @@ task fatJar(type: Jar) {
     with jar
 }
 
+task copyTask(type: Copy) {
+    println "Copying configuration files"
+    from 'config'
+    into jar.archivePath.path + '/../config'
+}
+
+build.dependsOn copyTask
+fatJar.dependsOn build
+
+
 apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'kotlin'

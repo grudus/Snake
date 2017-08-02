@@ -25,9 +25,7 @@ Or if you want to contribute it itself
 ````bash
 git clone https://github.com/grudus/Snake.git
 cd Snake
-gradle build
 gradle fatJar
-cp -r ./config ./build/libs/config 
 cd ./build/libs
 java -jar Snake-all-{version}.jar
 ````
