@@ -7,7 +7,7 @@ import java.io.File
 
 class HighScoresWriter(path: String) {
     private val mapper: ObjectMapper = jacksonObjectMapper()
-    private val file = File(this.javaClass.classLoader.getResource(path).path)
+    private val file = File(path)
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun write(highScores: HighScores) {

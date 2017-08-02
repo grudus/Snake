@@ -5,7 +5,6 @@ import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.image.ImageObserver
-import java.io.File
 import javax.imageio.ImageIO
 
 enum class Field(val isBlocking: Boolean, imagePath: String? = null) {
@@ -23,7 +22,7 @@ enum class Field(val isBlocking: Boolean, imagePath: String? = null) {
 
     protected val image =
             if (imagePath != null)
-                ImageIO.read(File(javaClass.classLoader.getResource("img/tile/$imagePath").toURI()))
+                ImageIO.read(javaClass.classLoader.getResourceAsStream("img/tile/$imagePath"))
             else
                 null
 

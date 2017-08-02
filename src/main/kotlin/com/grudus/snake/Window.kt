@@ -15,6 +15,7 @@ import com.grudus.snake.menu.MenuPanel
 import com.grudus.snake.menu.MenuState
 import com.grudus.snake.settings.SettingsPanel
 import com.grudus.snake.settings.SettingsReader
+import com.grudus.snake.utils.StringUtils
 import java.awt.Dimension
 import java.awt.Font
 import java.awt.GraphicsEnvironment
@@ -25,7 +26,7 @@ import javax.swing.JFrame
 import javax.swing.JFrame.EXIT_ON_CLOSE
 import javax.swing.UIManager
 
-class Window(title: String, val width: Int = 800, val height: Int = 680, propertiesPath: String = "settings.json", highScoresPath: String = "high_scores.json") {
+class Window(title: String, val width: Int = 800, val height: Int = 680, propertiesPath: String = "config/settings.json", highScoresPath: String = "config/high_scores.json") {
     val settings = SettingsReader(propertiesPath).read()
     val highScores = HighScores(HighScoresReader(highScoresPath).read())
     private val frame = JFrame(title)
@@ -46,7 +47,7 @@ class Window(title: String, val width: Int = 800, val height: Int = 680, propert
     }
 
     fun getBoard(): Board =
-            if (settings.boardFilePath == null) DefaultMapGenerator().generate(settings.boardSize ?: Index(8, 8))
+            if (StringUtils.isBlank(settings.boardFilePath)) DefaultMapGenerator().generate(settings.boardSize ?: Index(8, 8))
             else SnMapGenerator().generate(File(settings.boardFilePath))
 
     fun onStateChange(menuState: MenuState) {

@@ -7,7 +7,6 @@ import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Image
 import java.awt.image.ImageObserver
-import java.io.File
 import javax.imageio.ImageIO
 
 enum class Food(imagePath: String, val points: Int, val probability: Int) {
@@ -46,7 +45,7 @@ enum class Food(imagePath: String, val points: Int, val probability: Int) {
     }
     ;
 
-    protected val image: Image = ImageIO.read(File(javaClass.classLoader.getResource("img/food/$imagePath").toURI()))
+    protected val image: Image = ImageIO.read(javaClass.classLoader.getResourceAsStream("img/food/$imagePath"))
 
     abstract fun interact(snake: Snake)
     abstract fun draw(g: Graphics, tileSize: Dimension, index: Index, imageObserver: ImageObserver)

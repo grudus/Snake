@@ -25,7 +25,6 @@ class Snake(startIndex: Index, startSpeed: Speed, initialLength: Int) {
     private val body = SnakeBody(initialLength, startIndex)
 
     fun updatePosition(board: Board, foods: Foods) {
-        body.head.direction = direction
         val newHeadIndex = calculateNewHeadIndex(board)
 
         if (board.couldBlock(newHeadIndex) || isBody(newHeadIndex)) {
@@ -37,6 +36,7 @@ class Snake(startIndex: Index, startSpeed: Speed, initialLength: Int) {
             onFoodEaten(foods, board, newHeadIndex)
         }
 
+        body.head.direction = direction
         for (i in body.size - 1 downTo 1)
             body.changePositionToPrevious(i)
 
