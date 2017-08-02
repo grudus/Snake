@@ -42,6 +42,21 @@ java -jar Snake-all-{version}.jar
 
 **ESC** to pause
 
-<br/><br/>
+<br/>
 
+## Dev info
+
+Application is written in [Kotlin programming language](https://kotlinlang.org/) and uses [Swing](https://en.wikipedia.org/wiki/Swing_(Java)) for graphic interface (GUI)
+
+Additionaly, it uses:
+* [Gradle](https://gradle.org/) for build an application
+* [Jackson for kotlin](https://github.com/FasterXML/jackson-module-kotlin) for parsing JSON files
+* [SLF4J](https://www.slf4j.org/) for logging messages
+* [RxKotlin](https://github.com/ReactiveX/RxKotlin) for simple implementation of EventBus
+
+Source of sprites and icons:
+* [Snake](https://github.com/eugeneloza/SnakeGame)
+* Brick and foods - Icons from www.flaticon.com made by Freepik and Madebyoliver 
+
+<br/><br/><br/>
 Feel free to contribute.
