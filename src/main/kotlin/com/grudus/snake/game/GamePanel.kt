@@ -12,7 +12,8 @@ import com.grudus.snake.game.board.BoardPanel
 import com.grudus.snake.game.panel.ControlPanel
 import com.grudus.snake.highscores.HighScores
 import com.grudus.snake.highscores.dialog.NewHighScoreDialog
-import com.grudus.snake.menu.MenuState
+import com.grudus.snake.menu.MenuPanel
+import com.grudus.snake.menu.MenuPanel.*
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.event.ComponentEvent
@@ -94,7 +95,7 @@ class GamePanel(board: Board, val highScores: HighScores) : LifeCyclePanel(), Ke
         when (currentState) {
             State.PLAYING -> EventBus.publish(PauseEvent())
             State.PAUSE -> EventBus.publish(ResumeEvent())
-            State.END -> EventBus.publish(ShowMenuEvent(MenuState.PLAY))
+            State.END -> EventBus.publish(ShowMenuEvent(MenuPanel.State.PLAY))
         }
     }
 

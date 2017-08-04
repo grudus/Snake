@@ -1,7 +1,6 @@
 package com.grudus.snake.panels.selectable
 
 import com.grudus.snake.LifeCyclePanel
-import com.grudus.snake.menu.MenuState
 import com.grudus.snake.utils.Colors
 import com.grudus.snake.utils.FontUtils
 import com.grudus.snake.utils.GraphicsUtils
@@ -28,6 +27,7 @@ abstract class SelectablePanel(
     }
 
     protected abstract fun onStateSelected(selected: Int)
+    protected open fun onCancel() {}
 
     override fun onInit() {
         addKeyListener(this)
@@ -54,19 +54,21 @@ abstract class SelectablePanel(
 
     override fun keyPressed(e: KeyEvent?) {
         currentState = when (e?.keyCode) {
-            VK_UP -> (--currentState % MenuState.values().size)
-            VK_DOWN -> (++currentState % MenuState.values().size)
+            VK_UP -> (--currentState % values.size)
+            VK_DOWN -> (++currentState % values.size)
             else -> currentState
         }
         if (currentState < 0) {
-            currentState = MenuState.values().size - Math.abs(currentState)
+            currentState = values.size - Math.abs(currentState)
         }
         repaint()
     }
 
     override fun keyReleased(e: KeyEvent?) {
-        if (e?.keyCode == VK_ENTER)
-            onStateSelected(currentState)
+        when(e?.keyCode) {
+            VK_ESCAPE -> onCancel()
+            VK_ENTER -> onStateSelected(currentState)
+        }
     }
 
     override fun keyTyped(e: KeyEvent?) {}

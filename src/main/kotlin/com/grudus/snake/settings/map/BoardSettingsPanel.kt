@@ -1,6 +1,9 @@
-package com.grudus.snake.settings
+package com.grudus.snake.settings.map
 
+import com.grudus.snake.LifeCyclePanel
 import com.grudus.snake.game.Index
+import com.grudus.snake.settings.ChangingSettings
+import com.grudus.snake.settings.Settings
 import com.grudus.snake.utils.Colors
 import com.grudus.snake.utils.FontUtils
 import com.grudus.snake.utils.component.ChooseFileButton
@@ -16,7 +19,7 @@ import javax.swing.JTextField
 import javax.swing.border.LineBorder
 import javax.swing.border.TitledBorder
 
-class BoardSettingsPanel(val settings: Settings) : JPanel(), ChangingSettings {
+class BoardSettingsPanel(val settings: Settings) : LifeCyclePanel(), ChangingSettings {
     private val rowsLabel = JLabel("Rows: ")
     private val rows = NumericalTextField(3)
     private val columnsLabel = JLabel("Columns: ")
