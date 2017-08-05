@@ -16,7 +16,7 @@ import java.io.File
 class BoardSettingsPanel(val settings: Settings) : LifeCyclePanel() {
 
     private val mapListPanel = MapListPanel(File(Config.MAPS_FOLDER))
-    private val mapPreviewPanel = MapPreviewPanel(mapListPanel.initialSelect())
+    private val mapPreviewPanel = MapPreviewPanel(mapListPanel.initialSelect)
 
     init {
         background = Colors.PANEL_BACKGROUND
