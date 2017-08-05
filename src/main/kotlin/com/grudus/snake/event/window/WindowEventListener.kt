@@ -11,5 +11,10 @@ class WindowEventListener(val window: Window): EventListener() {
             log.debug("Going back the to menu from " + it.state)
             window.showMenuPanel(it.state)
         }
+
+        EventBus.listen(ChangePanelEvent::class.java).subscribe {
+            log.debug("Changing panel to " + it.panel.javaClass.simpleName)
+            window.changePanel(it.panel)
+        }
     }
 }

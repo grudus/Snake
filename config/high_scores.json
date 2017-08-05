@@ -1,1 +1,42 @@
-[{"name":"grudus","points":212},{"name":"Gniewosz","points":90},{"name":"Plamisty","points":80},{"name":"Tududu","points":70},{"name":"John Lenon","points":30},{"name":"Yoko Ono","points":25},{"name":"Alex","points":20},{"name":"Crazy Frog","points":19},{"name":"Grubson","points":20},{"name":"qdx","points":5}]
+[
+  {
+    "name": "github.com/grudus",
+    "points": 140
+  },
+  {
+    "name": "Gniewosz",
+    "points": 90
+  },
+  {
+    "name": "Plamisty",
+    "points": 80
+  },
+  {
+    "name": "Jimmy Page",
+    "points": 70
+  },
+  {
+    "name": "John Lenon",
+    "points": 30
+  },
+  {
+    "name": "Yoko Ono",
+    "points": 25
+  },
+  {
+    "name": "Alex",
+    "points": 20
+  },
+  {
+    "name": "Crazy Frog",
+    "points": 19
+  },
+  {
+    "name": "Laj laj laj",
+    "points": 12
+  },
+  {
+    "name": "Asnyk",
+    "points": 5
+  }
+]

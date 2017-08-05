@@ -3,7 +3,7 @@ package com.grudus.snake.highscores
 import com.grudus.snake.LifeCyclePanel
 import com.grudus.snake.event.EventBus.publish
 import com.grudus.snake.event.window.ShowMenuEvent
-import com.grudus.snake.menu.MenuState
+import com.grudus.snake.menu.MenuPanel.State.HIGH_SCORES
 import com.grudus.snake.utils.Colors
 import com.grudus.snake.utils.FontUtils
 import com.grudus.snake.utils.GraphicsUtils
@@ -38,7 +38,7 @@ class HighScoresPanel(val highScores: HighScores) : LifeCyclePanel(), KeyListene
 
     override fun keyPressed(e: KeyEvent?) {
         if (e?.keyCode == KeyEvent.VK_ESCAPE) {
-            publish(ShowMenuEvent(MenuState.HIGH_SCORES))
+            publish(ShowMenuEvent(HIGH_SCORES))
         }}
 
     private fun createHighScoreItem(position: Int, score: Score): String =

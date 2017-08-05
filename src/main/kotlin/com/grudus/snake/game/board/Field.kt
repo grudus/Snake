@@ -1,6 +1,7 @@
 package com.grudus.snake.game.board
 
 import com.grudus.snake.game.Position
+import com.grudus.snake.utils.Colors
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
@@ -16,7 +17,10 @@ enum class Field(val isBlocking: Boolean, imagePath: String? = null) {
     },
 
     EMPTY(false) {
-        override fun draw(g: Graphics, size: Dimension, position: Position, imageObserver: ImageObserver) {}
+        override fun draw(g: Graphics, size: Dimension, position: Position, imageObserver: ImageObserver) {
+            g.color = Colors.BOARD_BACKGROUND
+            g.fillRect(position.x - size.width / 2, position.y - size.height / 2, size.width, size.height)
+        }
     }
     ;
 

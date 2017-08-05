@@ -12,9 +12,9 @@ import com.grudus.snake.highscores.HighScores
 import com.grudus.snake.highscores.HighScoresPanel
 import com.grudus.snake.highscores.HighScoresReader
 import com.grudus.snake.menu.MenuPanel
-import com.grudus.snake.menu.MenuState
-import com.grudus.snake.settings.SettingsPanel
+import com.grudus.snake.menu.MenuPanel.State.*
 import com.grudus.snake.settings.SettingsReader
+import com.grudus.snake.settings.panel.SettingsPanel
 import com.grudus.snake.utils.StringUtils
 import java.awt.Dimension
 import java.awt.Font
@@ -50,24 +50,26 @@ class Window(title: String, val width: Int = 800, val height: Int = 680, propert
             if (StringUtils.isBlank(settings.boardFilePath)) DefaultMapGenerator().generate(settings.boardSize ?: Index(8, 8))
             else SnMapGenerator().generate(File(settings.boardFilePath))
 
-    fun onStateChange(menuState: MenuState) {
-        when (menuState) {
-            MenuState.EXIT -> frame.dispatchEvent(WindowEvent(frame, WindowEvent.WINDOW_CLOSING))
-            MenuState.PLAY -> startPanel(GamePanel(getBoard(), highScores))
-            MenuState.SETTINGS -> startPanel(SettingsPanel(settings))
-            MenuState.HIGH_SCORES -> startPanel(HighScoresPanel(highScores))
-        }
-    }
 
-    private fun startPanel(panel: LifeCyclePanel) {
+    fun changePanel(panel: LifeCyclePanel) {
         frame.contentPane = panel
         panel.onInit()
         frame.validate()
         frame.repaint()
     }
+    
+    fun onStateChange(menuState: MenuPanel.State) {
+        when (menuState) {
+            EXIT -> frame.dispatchEvent(WindowEvent(frame, WindowEvent.WINDOW_CLOSING))
+            PLAY -> changePanel(GamePanel(getBoard(), highScores))
+            SETTINGS -> changePanel(SettingsPanel(settings))
+            HIGH_SCORES -> changePanel(HighScoresPanel(highScores))
+        }
+    }
 
-    fun showMenuPanel(currentState: MenuState = MenuState.PLAY) {
-        startPanel(MenuPanel(this, currentState))
+
+    fun showMenuPanel(currentState: MenuPanel.State = PLAY) {
+        changePanel(MenuPanel(this, currentState))
     }
 
 
