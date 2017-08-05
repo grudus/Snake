@@ -30,8 +30,14 @@ task fatJar(type: Jar) {
 
 task copyTask(type: Copy) {
     println "Copying configuration files"
+    def configDir = jar.archivePath.path + '/../config'
+
     from 'config'
-    into jar.archivePath.path + '/../config'
+    into configDir
+
+    println "Copying maps"
+    from 'maps'
+    into configDir
 }
 
 build.dependsOn copyTask
