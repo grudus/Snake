@@ -13,7 +13,7 @@ import java.awt.event.KeyListener
 import java.awt.font.TextAttribute
 
 abstract class SelectablePanel(
-        private val values: Collection<Displayable>,
+        private val values: List<Displayable>,
         initialState: Int = 0,
         private val rules: SelectRules = SelectRules(Colors.MENU_ITEM_NORMAL, Colors.MENU_ITEM_SELECTED, FontUtils.roboto(24)),
         private val calculatePadding: (Int) -> Int = { height -> (height * 0.15).toInt() })
@@ -28,6 +28,8 @@ abstract class SelectablePanel(
 
     protected abstract fun onStateSelected(selected: Int)
     protected open fun onCancel() {}
+    protected open fun onChange(selected: Int) {}
+    protected fun currentSelected() = values[currentState]
 
     override fun onInit() {
         addKeyListener(this)
@@ -62,6 +64,7 @@ abstract class SelectablePanel(
             currentState = values.size - Math.abs(currentState)
         }
         repaint()
+        onChange(currentState)
     }
 
     override fun keyReleased(e: KeyEvent?) {

@@ -1,7 +1,1 @@
-{
-  "boardSize": {
-    "column": 20,
-    "row": 15
-  },
-  "boardFilePath": ""
-}
+{"boardSize":{"row":15,"column":20},"boardFilePath":"D:\\IdeaProjects\\Snake\\config\\maps\\najgorzej.sn"}
