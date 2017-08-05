@@ -17,6 +17,36 @@ Why you should choose it instead of another Snake game? I don't see any reason. 
 ![screenshot 2017-08-02 2](https://user-images.githubusercontent.com/18220458/28890414-52e8d472-77c7-11e7-9148-8c49cacb299f.png)
 <br/><br/><br/>
 
+## How to add custom map?
+Firstly, you must to create `text file` and fill it with 1 and 0, where 1 means "brick" and 0 means "nothing". For example:
+
+````
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+````
+
+Then, you have to save it with `.sn` extension (e.g. `mymap.sn`) and **save it in `config/maps`** directory.
+Lastly, you must choose your file in game settings (press `Enter`). 
+
+![](https://user-images.githubusercontent.com/18220458/28995509-306b8ebe-79eb-11e7-8743-372f5aa7a7d2.png)
+
+Voilà. You can now play in your very own map!
+
+<br/><br/>
+
 ## How to get?
 If you want to play in this super original and innovative game you can download the zip with [the latest release](https://github.com/grudus/Snake/releases). <br/>
 
