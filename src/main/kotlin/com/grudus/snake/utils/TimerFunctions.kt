@@ -1,4 +1,4 @@
-package com.grudus.snake.utils
+ package com.grudus.snake.utils
 
 import javax.swing.Timer
 

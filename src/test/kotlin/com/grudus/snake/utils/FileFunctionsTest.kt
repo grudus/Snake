@@ -16,5 +16,11 @@ class FileFunctionsTest: ShouldSpec() {
             file.hasExtension(extension) shouldBe true
         }
 
+        should("return false when file hasn't got extension") {
+            val file = File(randomAlphabetic(11))
+
+            file.hasExtension(randomAlphabetic(4)) shouldBe false
+        }
+
     }
 }

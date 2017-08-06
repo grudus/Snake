@@ -7,9 +7,9 @@ import javax.swing.Timer
 class TimerFunctionsTest : ShouldSpec() {
     init {
 
-        should("Run only one time") {
+        should("run only one time") {
             var timerInvocations = 0
-            val delay = 10
+            val delay = 100
 
             Timer(delay) {
                 timerInvocations++

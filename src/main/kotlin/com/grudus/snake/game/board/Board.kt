@@ -10,7 +10,7 @@ class Board(private var board: List<List<Field>>) {
     val rows = board.size
     val columns = board[0].size
 
-    fun isAccessible(row: Int, column: Int) = !board[row][column].isBlocking
+    fun isAccessible(row: Int, column: Int) = !couldBlock(Index(row, column))
 
     fun draw(g: Graphics, tileDimension: Dimension, imageObserver: ImageObserver) {
         for (row in 0..rows - 1)

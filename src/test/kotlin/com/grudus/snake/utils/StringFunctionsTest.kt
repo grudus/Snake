@@ -9,7 +9,7 @@ class StringFunctionsTest : ShouldSpec() {
     init {
 
 
-        should("Truncate string when more than 12 chars") {
+        should("truncate string when more than 12 chars") {
             val string = randomAlphabetic(55)
             val truncated = string.truncate(12)
 
@@ -17,26 +17,26 @@ class StringFunctionsTest : ShouldSpec() {
             truncated shouldBe "..." + string.substring(55 - 12)
         }
 
-        should("Return string when smaller than truncated length") {
+        should("return string when smaller than truncated length") {
             val string = randomAlphabetic(11)
             val truncated = string.truncate(12)
 
             truncated shouldBe string
         }
 
-        should("Detect null string") {
+        should("detect null string") {
             isNullOrEmpty(null) shouldBe true
         }
 
-        should("Detect empty string when only whitespaces are present") {
+        should("detect empty string when only whitespaces are present") {
             isNullOrEmpty("  \t  \n") shouldBe true
         }
 
-        should("Detect empty string when no value is present") {
+        should("detect empty string when no value is present") {
             isNullOrEmpty("") shouldBe true
         }
 
-        should("Not detect empty string when value is present") {
+        should("not detect empty string when value is present") {
             isNullOrEmpty(randomAlphabetic(11) + "\t") shouldBe false
         }
     }
